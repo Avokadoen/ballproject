@@ -23,7 +23,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
 	// for holding ball bitmap and physics related data
 	private CharacterSprite characterSprite;
+
+	// for holding ball bitmap and physics related data
 	private HittableController hittableController;
+
+	// deals with all in-game gui
+	public GUI gui;
 
 	// variable to talk to hardware for feedback
 	private final MediaPlayer plinger;
@@ -61,6 +66,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 		// get screen properties
 		Rect frame = holder.getSurfaceFrame();
 
+		gui = new GUI();
+
 		// create the ball
 		characterSprite =
 				new CharacterSprite(
@@ -72,7 +79,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 				new HittableController(
 						frame.width(), frame.height(), 1f, 1f,
 						BitmapFactory.decodeResource(getResources(),R.drawable.oxygen),
-						BitmapFactory.decodeResource(getResources(),R.drawable.spike));
+						BitmapFactory.decodeResource(getResources(),R.drawable.spike), gui);
 
 		// initialize the game thread
 		running = true;
@@ -95,6 +102,16 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 			}
 			retry = false;
 		}
+	}
+
+	public void pauseThread(){
+		running = false;
+		thread.setRunning(running);
+	}
+
+	public void resumeThread(){
+		running = true;
+		thread.setRunning(running);
 	}
 
 	public void update(double deltaTime) {

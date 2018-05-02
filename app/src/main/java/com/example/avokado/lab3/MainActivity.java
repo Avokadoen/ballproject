@@ -1,5 +1,6 @@
 package com.example.avokado.lab3;
 
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -9,11 +10,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.WindowManager;
 
+
+
 /* Sources:
 https://www.androidauthority.com/android-game-java-785331/
 */
 
-// note: this code is a modified version of above sources
+// This activity should be main menu
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener{
 
@@ -24,8 +27,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 	// the renderer
 	private GameView theGame;
 
+	static private SharedPreferences mPrefs;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		mPrefs = getPreferences(MODE_PRIVATE);
+
 		theGame = new GameView(this);
 
 		super.onCreate(savedInstanceState);
@@ -52,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 		super.onResume();
 		// create interface for accelerometer
 		mSensorManager.registerListener(this, mGravity, SensorManager.SENSOR_DELAY_GAME);
+
 	}
 
 	@Override

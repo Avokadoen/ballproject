@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Rect;
-import android.util.Log;
+import android.graphics.RectF;
 
 import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -13,10 +13,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 // TODO: rotate somehow
 
 public class HittableController {
-	static public int imgSizeX;
-	static public int imgSizeY;
-	public int frameWidth;
-	public int frameHeight;
+	static private int imgSizeX;
+	static private int imgSizeY;
+	private int frameWidth;
+	private int frameHeight;
 	static private int atomicPrecision = 10000;
 
 	private float oxygenRatio;
@@ -37,9 +37,11 @@ public class HittableController {
 	private Bitmap oxygenImage;
 	private Bitmap spikeImage;
 
-	public HittableController(int frameWidth, int frameHeight, float oxygenSpawnInterval, float spikesSpawnInterval,
-							  Bitmap oxygenImage, Bitmap spikeImage){
+	public GUI gui;
 
+	public HittableController(int frameWidth, int frameHeight, float oxygenSpawnInterval, float spikesSpawnInterval,
+							  Bitmap oxygenImage, Bitmap spikeImage, GUI gui){
+		this.gui = gui;
 		this.frameWidth = frameWidth;
 		this.frameHeight = frameHeight;
 		imgSizeX = (int)(frameWidth * 0.05);
@@ -99,20 +101,26 @@ public class HittableController {
 				if(((Hittable) obj).move(deltaTime)){
 					oxygen.remove(obj);
 				}
-				int y = ((Hittable) obj).currentX;
-				int x = ((Hittable) obj).currentY;
-				Rect hitbox = new Rect(x, y,
-						(x + oxygenImage.getWidth()), (y + oxygenImage.getHeight()));
+				Matrix matrix = new Matrix();
+				matrix.setRotate(((Hittable) obj).getCanvasDrawAngle(), 0, 0);
+				matrix.postTranslate(((Hittable) obj).currentY, ((Hittable) obj).currentX);
+				RectF hitboxFloat = new RectF(0, 0,
+						oxygenImage.getWidth(), oxygenImage.getHeight());
+				matrix.mapRect(hitboxFloat);
+				Rect hitbox = new Rect
+						((int)hitboxFloat.left, (int)hitboxFloat.top, (int)hitboxFloat.right, (int)hitboxFloat.bottom);
 				if(player.checkContact(hitbox)){
 					oxygen.remove(obj);
 					status += 1;
 
-					ScoreHittable newScore = new ScoreHittable(x, y, player.getScore() + 10, frameWidth / 25);
+					ScoreHittable newScore = new ScoreHittable
+							(((Hittable) obj).currentY, ((Hittable) obj).currentX,
+									player.getScore() + 10, frameWidth / 25, gui);
+
 					scores.add(newScore);
 				}
 			}
 		}
-		Log.d("debug", "update: oxygen count: " + index);
 		index = -1;
 		for (Object obj : spikes) {
 			index++;
@@ -120,10 +128,14 @@ public class HittableController {
 				if(((Hittable) obj).move(deltaTime)){
 					spikes.remove(obj);
 				}
-				int y = ((Hittable) obj).currentX;
-				int x = ((Hittable) obj).currentY;
-				Rect hitbox = new Rect(x, y,
-						(x + spikeImage.getWidth()), (y + spikeImage.getHeight()));
+				Matrix matrix = new Matrix();
+				matrix.setRotate(((Hittable) obj).getCanvasDrawAngle(), 0, 0);
+				matrix.postTranslate(((Hittable) obj).currentY, ((Hittable) obj).currentX);
+				RectF hitboxFloat = new RectF(0, 0,
+						spikeImage.getWidth(), spikeImage.getHeight());
+				matrix.mapRect(hitboxFloat);
+				Rect hitbox = new Rect
+						((int)hitboxFloat.left, (int)hitboxFloat.top, (int)hitboxFloat.right, (int)hitboxFloat.bottom);
 				if(player.checkContact(hitbox)){
 					spikes.remove(obj);
 					return -1;
