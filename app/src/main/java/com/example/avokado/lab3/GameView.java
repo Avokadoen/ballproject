@@ -8,8 +8,11 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.media.MediaPlayer;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
+
+import java.util.Vector;
 
 
 // class for creating frames
@@ -20,6 +23,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
 	// for holding ball bitmap and physics related data
 	private CharacterSprite characterSprite;
+	private HittableController hittableController;
 
 	// variable to talk to hardware for feedback
 	private final MediaPlayer plinger;
@@ -60,8 +64,15 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 		// create the ball
 		characterSprite =
 				new CharacterSprite(
-						BitmapFactory.decodeResource(getResources(),R.drawable.beachball),
+						BitmapFactory.decodeResource(getResources(),R.drawable.balloon),
 						frame.width(), frame.centerX(), frame.centerY());
+
+		// create hittable controller
+		hittableController =
+				new HittableController(
+						frame.width(), frame.height(), 1f, 1f,
+						BitmapFactory.decodeResource(getResources(),R.drawable.oxygen),
+						BitmapFactory.decodeResource(getResources(),R.drawable.spike));
 
 		// initialize the game thread
 		running = true;
@@ -79,6 +90,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 				thread.setRunning(running);
 				thread.join();
 			} catch (InterruptedException e) {
+				Log.d("debug", "surfaceDestroyed: ");
 				e.printStackTrace();
 			}
 			retry = false;
@@ -87,6 +99,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
 	public void update(double deltaTime) {
 		// update sprite
+		int hittableStatus = hittableController.update(deltaTime, characterSprite);
+		if( hittableStatus >= 1){
+			characterSprite.recieveScore(hittableStatus * 10);
+		}
+		else if( hittableStatus <= -1){
+
+		}
 		characterSprite.update(deltaTime);
 		effectInterval += deltaTime;
 	}
@@ -125,8 +144,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 		// draw everything to screen
 		canvas.drawColor(Color.WHITE);
 		Paint paint = new Paint();
-		paint.setColor(Color.BLACK);
+		paint.setColor(Color.WHITE);
 		canvas.drawRect(bounds, paint);
+		hittableController.draw(canvas);
 		characterSprite.draw(canvas);
 	}
 

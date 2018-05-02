@@ -11,11 +11,9 @@ public class GameMainThread extends Thread {
 	private GameView gameView;
 
 	public GameMainThread(SurfaceHolder surfaceHolder, GameView gameView) {
-
 		super();
 		this.surfaceHolder = surfaceHolder;
 		this.gameView = gameView;
-
 	}
 
 	@Override
@@ -50,8 +48,6 @@ public class GameMainThread extends Thread {
 		}
 	}
 
-	public void setRunning(boolean isRunning) {
-		running = isRunning;
-	}
+	public void setRunning(boolean isRunning) {		running = isRunning;	}
 
 }
