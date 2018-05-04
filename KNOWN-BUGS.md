@@ -7,24 +7,29 @@ level 2: A nuisance for the user, either from a technical perspective or mechani
 
 level 3: Game breaking in nature. Will probably have the same origin as a level 2 bug.
 
+
 # Bug template:
--*Title
-Description: *Mandatory
-Possible solution: *Optional
-Cause: *Optional *guessing is allowed
+- Description: *Mandatory
+- Possible solution: *Optional
+- Cause: *Optional *guessing is allowed
 
 
 # LEVEL 3:
 # Crash on close
-Description: App does not behave properly and/or crash when you close it and then open it
-Possible solution:
-Cause: On pause and resume does not deal with app state
+- Description: App does not behave properly and/or crash when you close it and then open it
+- Possible solution:
+- Cause: On pause and resume does not deal with app state
 
 # LEVEL 2:
 # Stuck in corner
-Description: When the balloon scales by a corner it can scale beyond the frame
-Possible solution:
-Cause: guess: Balloon can exit the frame with scale/rotation
+- Description: When the balloon scales by a corner it can scale beyond the frame
+- Possible solution:
+- Cause: guess: Balloon can exit the frame with scale/rotation
+
+# Phone goes to 'sleep' while playing
+- Description: While playing the screen fades and eventually phone goes to sleep.
+- Possible solution:
+- Cause: guess: We are not dealing properly with media mode?
 
 # LEVEL 1:
 
