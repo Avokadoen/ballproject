@@ -1,28 +1,108 @@
 package com.example.avokado.lab3;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 
-/**
- * Created by Avokado on 02-May-18.
- */
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+
+import static android.content.Context.MODE_PRIVATE;
+
+// kanskje random/basert på score melding
 
 public class GUI {
+	int guiState;
+	Bitmap deadMenu;
+
+	private int scores[];
+
+	RectF retryRect;
+	RectF menuRect;
+
+	private View.OnTouchListener handleTouch = new View.OnTouchListener() {
+
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+			if(guiState == -1){
+				int x = (int) event.getX();
+				int y = (int) event.getY();
+
+				switch (event.getAction()) {
+					case MotionEvent.ACTION_DOWN:
+						break;
+					case MotionEvent.ACTION_MOVE:
+						break;
+					case MotionEvent.ACTION_UP:
+						if(retryRect.contains(x, y)){
+							guiState = 2;
+						}
+						break;
+				}
+
+
+			}
+			return true;
+		}
+	};
+
 	GUI(){
 
+		guiState = 0;
 	}
-	void deadLoop(){
-		while(true){
 
+	public void setView(View v){
+		v.setOnTouchListener(handleTouch);
+	}
+
+	public int drawDeadMenu(Canvas canvas){
+		if(guiState == -1){
+			canvas.drawBitmap(deadMenu, 0, 0, null);
 		}
+		return guiState;
 	}
 
-	public Bitmap textAsBitmap(String text, int textWidth, int textSize) {
+	public void createDeadMenu(int score, Rect frame){
+
+		Bitmap deadMessage;
+		Bitmap menuOption;
+		Bitmap retryOption;
+
+		deadMessage 	= textAsBitmap("SCORE: " + String.valueOf(score), (frame.width()/2), frame.height()/10);
+		menuOption 		= textAsBitmap("TO MENU", (frame.width()/4), frame.height()/14);
+		retryOption 	= textAsBitmap("RETRY", (frame.width()/4), frame.height()/14);
+
+		deadMenu = Bitmap.createBitmap(frame.width(), frame.height(), deadMessage.getConfig());
+		Canvas canvas = new Canvas(deadMenu);
+		Matrix transform = new Matrix();
+		transform.setTranslate(deadMessage.getWidth()/2, frame.height()/6);
+		//Paint background = new Paint();
+		//background.setARGB(100, 255, 255, 255);
+		canvas.drawARGB(140, 0, 0, 0);
+		canvas.drawBitmap(deadMessage, transform, null);
+		transform.setTranslate(deadMessage.getWidth() - menuOption.getWidth(), frame.height()/2);
+		canvas.drawBitmap(menuOption, transform, null);
+		transform.setTranslate(deadMessage.getWidth() , frame.height()/2);
+		canvas.drawBitmap(retryOption, transform, null);
+		retryRect = new RectF(0, 0, retryOption.getWidth(), retryOption.getHeight());
+		transform.mapRect(retryRect);
+
+		guiState = -1;
+	}
+
+	static public Bitmap textAsBitmap(String text, int textWidth, int textSize) {
 		// Get text dimensions
 		TextPaint textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG
 				| Paint.LINEAR_TEXT_FLAG);

@@ -6,11 +6,10 @@ import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.RectF;
 
+import java.util.Collection;
 import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
-
-// TODO: rotate somehow
 
 public class HittableController {
 	static private int imgSizeX;
@@ -80,18 +79,18 @@ public class HittableController {
 
 		oxygenSpawnIntervalCounter.addAndGet((int)(deltaTime*atomicPrecision));
 		if( oxygenSpawnIntervalCounter.intValue() >= oxygenSpawnInterval.intValue()){
-			double speed = (rand.nextDouble() / 10) + 0.08;
+			double speed = (rand.nextDouble() / 12) + 0.06;
 			Hittable newOxygen = new Hittable(speed, frameWidth, frameHeight, rand);
 			oxygen.add(newOxygen);
-			oxygenSpawnIntervalCounter.addAndGet(-oxygenSpawnInterval.intValue());
+			oxygenSpawnIntervalCounter.addAndGet(-oxygenSpawnIntervalCounter.intValue());
 		}
 
 		spikesSpawnIntervalCounter.addAndGet((int)(deltaTime*atomicPrecision));
 		if(spikesSpawnIntervalCounter.intValue() >= spikesSpawnInterval.intValue()){
-			double speed = (rand.nextDouble() / 12) + 0.08;
+			double speed = (rand.nextDouble() / 14) + 0.06;
 			Hittable newOxygen = new Hittable(speed, frameWidth, frameHeight, rand);
 			spikes.add(newOxygen);
-			spikesSpawnIntervalCounter.addAndGet(-spikesSpawnInterval.intValue());
+			spikesSpawnIntervalCounter.addAndGet(-spikesSpawnIntervalCounter.intValue());
 		}
 		int index = -1;
 		int status = 0;
@@ -115,7 +114,7 @@ public class HittableController {
 
 					ScoreHittable newScore = new ScoreHittable
 							(((Hittable) obj).currentY, ((Hittable) obj).currentX,
-									player.getScore() + 10, frameWidth / 25, gui);
+									player.getScore() + 10, frameWidth / 25);
 
 					scores.add(newScore);
 				}
@@ -137,7 +136,7 @@ public class HittableController {
 				Rect hitbox = new Rect
 						((int)hitboxFloat.left, (int)hitboxFloat.top, (int)hitboxFloat.right, (int)hitboxFloat.bottom);
 				if(player.checkContact(hitbox)){
-					spikes.remove(obj);
+					//spikes.remove(obj);
 					return -1;
 				}
 			}
@@ -176,5 +175,14 @@ public class HittableController {
 				canvas.drawBitmap(spikeImage, matrix, null);
 			}
 		}
+	}
+
+	public void reset(){
+		oxygen.clear();
+		spikes.clear();
+		scores.clear();
+
+		oxygenSpawnIntervalCounter.set(0);
+		spikesSpawnIntervalCounter.set(0);
 	}
 }

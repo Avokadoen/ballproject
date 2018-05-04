@@ -21,7 +21,7 @@ public class ScoreHittable extends Hittable {
 
 	private Bitmap scoreBitmap;
 
-	ScoreHittable(int startX, int startY, int score, int textSize, GUI gui){
+	ScoreHittable(int startX, int startY, int score, int textSize){
 		this.startX = startX;
 		this.startY = startY;
 		currentX 	= startX;
@@ -32,7 +32,7 @@ public class ScoreHittable extends Hittable {
 		imageAlpha 	= 255.0f;
 		lerpColorPos = 0;
 
-		scoreBitmap = gui.textAsBitmap(String.valueOf(score), textSize * 4,  textSize);
+		scoreBitmap = GUI.textAsBitmap(String.valueOf(score), textSize * 4,  textSize);
 
 	}
 

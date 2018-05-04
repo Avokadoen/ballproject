@@ -34,7 +34,7 @@ public class CharacterSprite {
 
 
 	public CharacterSprite(Bitmap bmp, int size, int X, int Y) {
-		// init bitmap
+
 		screenWidth = size;
 		score = 0;
 		float width = bmp.getWidth();
@@ -67,13 +67,18 @@ public class CharacterSprite {
 	}
 
 	public void draw(Canvas canvas) {
+
 		// draw sprite bitmap at x y
 		canvas.drawBitmap(image, x, y, null);
 	}
 
-	public void recieveScore(int score){
+	public void receiveScore(int score){
 		if(characterScale <= maxCharacterScale){
-			characterScale *= 1.05;
+
+			double growthRateModifier = 0.0001 * this.score;
+			if(growthRateModifier > 0.04) growthRateModifier = 0.04;
+
+			characterScale *= 1.05 - growthRateModifier;
 			imgSizeX = (int)(screenWidth * characterScale);
 			imgSizeY = (int)((screenWidth * characterScale) * ratio);
 			originalImage = Bitmap.createScaledBitmap(originalOriginalImage, imgSizeY, imgSizeX, false);
@@ -195,6 +200,17 @@ public class CharacterSprite {
 		Matrix matrix = new Matrix();
 		matrix.postRotate(newAngle);
 		image = Bitmap.createBitmap(originalImage, 0, 0, originalImage.getWidth(), originalImage.getHeight(), matrix, false);
+	}
+
+	public void reset(int x, int y){
+		prevx 			= x;
+		prevy 			= y;
+		this.x 			= x;
+		this.y 			= y;
+		velx 			= 0;
+		vely 			= 0;
+		characterScale 	= 0.02f;
+		score 			= 0;
 	}
 
 	public int getScore(){
