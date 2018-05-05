@@ -36,13 +36,17 @@
 - Possible solution:
 - state:
 
-
 # Add achievements
 - Description: Achievements for different cases, new score, timer, amount of games?
 - Possible solution:
 - state:
 
+# Player rewards/currency
+- Description: Reward the player with a currency and/or skins for balloon/skybox.
+- Possible solution: Give coins on each game run.
+- state:
+
 # Sounds
 - Description: Sounds to reflect actions done by player and to indicate game information
 - Possible solution:
-- state: 
+- state:
