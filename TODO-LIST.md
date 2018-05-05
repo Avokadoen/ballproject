@@ -19,21 +19,30 @@
 # Google Play Services Integration
 - Description: Add google play services integration with login and leaderboards
 - Possible solution:
+- state: done.
 
 # 2 TODO:
 
 # Add skybox to game, menu's and icons
 - Description: Implement a skybox for the game that also can be used as background for the game's menu's and icons.
 - Possible solution: Possibly a "moving" skybox in-game?
+- state:
 
 # 1 TODO:
 
 # Timer on each game run.
 - Description: A running timer that records how long the user's game has gone. Could also be implemented as a high-score leaderboard to see how long
   people has "survived" for.
-- Possible solution: *Optional
+- Possible solution:
+- state:
 
 
 # Add achievements
 - Description: Achievements for different cases, new score, timer, amount of games?
 - Possible solution:
+- state:
+
+# Sounds
+- Description: Sounds to reflect actions done by player and to indicate game information
+- Possible solution:
+- state: 
