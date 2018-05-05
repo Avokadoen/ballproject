@@ -22,7 +22,7 @@ level 3: Game breaking in nature. Will probably have the same origin as a level 
 
 # Possible memory leak on play/menu transition
 - Description: Going from play to menu, the app over time slows down, slow on input, slow on loading, eventually goes into a total crash.
-- Possible solution: 
+- Possible solution:
 - Cause: Guess: Memory leak, possibly from bitmaps of some sort. Dead menu or game bitmaps?
 
 
@@ -36,6 +36,11 @@ level 3: Game breaking in nature. Will probably have the same origin as a level 
 - Description: While playing the screen fades and eventually phone goes to sleep.
 - Possible solution:
 - Cause: guess: We are not dealing properly with media mode?
+
+# Scoring offline
+- Description: If you get a new highscore, it wont be saved in the future in the cloud
+- Possible solution:
+- Cause: not sending highest local score when online
 
 # LEVEL 1:
 
