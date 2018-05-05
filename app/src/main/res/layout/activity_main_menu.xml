@@ -54,7 +54,23 @@
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mm_play_bt"
-        app:layout_constraintVertical_bias="0.051" />
+        app:layout_constraintVertical_bias="0.031" />
+
+    <Button
+        android:id="@+id/mm_glolead_bt"
+        android:layout_width="211dp"
+        android:layout_height="51dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/globalBoard"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mm_loclead_bt"
+        app:layout_constraintVertical_bias="0.024" />
 
     <Button
         android:id="@+id/mm_pref_bt"
@@ -69,6 +85,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mm_loclead_bt"
-        app:layout_constraintVertical_bias="0.051" />
+        app:layout_constraintTop_toBottomOf="@+id/mm_glolead_bt"
+        app:layout_constraintVertical_bias="0.055" />
 </android.support.constraint.ConstraintLayout>
