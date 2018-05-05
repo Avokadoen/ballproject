@@ -1,19 +1,12 @@
-package com.example.avokado.lab3;
+package com.ahs.avokado.gettingair;
 
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.text.Layout;
-import android.text.StaticLayout;
-import android.text.TextPaint;
 
 /*
 	sources:
 		-textAsBitmap: http://snipplr.com/view/73714/android-draw-text-to-dynamically-sized-bitmap/
 */
-
-import static android.graphics.Paint.ANTI_ALIAS_FLAG;
 
 public class ScoreHittable extends Hittable {
 	private float imageAlpha;

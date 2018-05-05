@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 26
     defaultConfig {
-        applicationId "com.example.avokado.lab3"
+        applicationId "com.ahs.avokado.gettingair"
         minSdkVersion 23
         targetSdkVersion 26
         versionCode 1

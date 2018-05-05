@@ -1,4 +1,4 @@
-package com.example.avokado.lab3;
+package com.ahs.avokado.gettingair;
 
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;

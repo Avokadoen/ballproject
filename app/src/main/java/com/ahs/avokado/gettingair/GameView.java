@@ -1,4 +1,4 @@
-package com.example.avokado.lab3;
+package com.ahs.avokado.gettingair;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,17 +12,18 @@ import android.os.Vibrator;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
-import android.view.View;
+
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.games.Games;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Vector;
 
 // todo: cosmetic: balloon pop frame on death
 // todo: reset functions for retry option
@@ -86,15 +87,15 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 		// create the ball
 		characterSprite =
 				new CharacterSprite(
-						BitmapFactory.decodeResource(getResources(),R.drawable.balloon),
+						BitmapFactory.decodeResource(getResources(), R.drawable.balloon),
 						frame.width(), frame.centerX(), frame.centerY());
 
 		// create hittable controller
 		hittableController =
 				new HittableController(
 						frame.width(), frame.height(), 1f, 1f,
-						BitmapFactory.decodeResource(getResources(),R.drawable.oxygen),
-						BitmapFactory.decodeResource(getResources(),R.drawable.spike), gui);
+						BitmapFactory.decodeResource(getResources(), R.drawable.oxygen),
+						BitmapFactory.decodeResource(getResources(), R.drawable.spike), gui);
 
 		// initialize the game thread
 		running = true;
@@ -128,6 +129,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 				playerState = 0;
 			}
 			else if(playerState == -1){
+				GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getContext());
+				if(account != null){
+					Games.getLeaderboardsClient(getContext(), account)
+							.submitScore(getResources().getString(R.string.score_leader_id), characterSprite.getScore());
+				}
+
 				gui.createDeadMenu(characterSprite.getScore(), windowFrame);
 
 				//File dir = getContext().getFilesDir();

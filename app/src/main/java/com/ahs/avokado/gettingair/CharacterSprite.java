@@ -1,4 +1,4 @@
-package com.example.avokado.lab3;
+package com.ahs.avokado.gettingair;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;

@@ -1,4 +1,4 @@
-package com.example.avokado.lab3;
+package com.ahs.avokado.gettingair;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;

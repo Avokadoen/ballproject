@@ -1,4 +1,4 @@
-package com.example.avokado.lab3;
+package com.ahs.avokado.gettingair;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -6,7 +6,6 @@ import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.RectF;
 
-import java.util.Collection;
 import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
