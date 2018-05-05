@@ -20,6 +20,12 @@ level 3: Game breaking in nature. Will probably have the same origin as a level 
 - Possible solution:
 - Cause: On pause and resume does not deal with app state
 
+# Possible memory leak on play/menu transition
+- Description: Going from play to menu, the app over time slows down, slow on input, slow on loading, eventually goes into a total crash.
+- Possible solution: 
+- Cause: Guess: Memory leak, possibly from bitmaps of some sort. Dead menu or game bitmaps?
+
+
 # LEVEL 2:
 # Stuck in corner
 - Description: When the balloon scales by a corner it can scale beyond the frame
