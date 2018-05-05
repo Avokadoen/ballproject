@@ -16,6 +16,10 @@
 
 # 3 TODO:
 
+# Google Play Services Integration
+- Description: Add google play services integration with login and leaderboards
+- Possible solution:
+
 # 2 TODO:
 
 # Add skybox to game, menu's and icons
@@ -26,5 +30,10 @@
 
 # Timer on each game run.
 - Description: A running timer that records how long the user's game has gone. Could also be implemented as a high-score leaderboard to see how long
-  people has "survived" for. 
+  people has "survived" for.
 - Possible solution: *Optional
+
+
+# Add achievements
+- Description: Achievements for different cases, new score, timer, amount of games?
+- Possible solution:
