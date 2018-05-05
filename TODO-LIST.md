@@ -18,7 +18,7 @@
 
 # Google Play Services Integration
 - Description: Add google play services integration with login and leaderboards
-- Possible solution: 
+- Possible solution:
 
 # 2 TODO:
 
@@ -32,3 +32,8 @@
 - Description: A running timer that records how long the user's game has gone. Could also be implemented as a high-score leaderboard to see how long
   people has "survived" for.
 - Possible solution: *Optional
+
+
+# Add achievements
+- Description: Achievements for different cases, new score, timer, amount of games?
+- Possible solution:
