@@ -1,5 +1,6 @@
 package com.example.avokado.lab3;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -11,6 +12,7 @@ import android.os.Vibrator;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
+import android.view.View;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -51,7 +53,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 	// toggle thread
 	public boolean running = false;
 
-	public GameView(Context context) {
+	public GameView(final Context context) {
 		super(context);
 		playerState = 0;
 		// prepare parameter for thread
@@ -66,8 +68,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 		plinger = MediaPlayer.create(context, R.raw.hitmarker);
 		vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
 		effectInterval = 0f;
-
-
 	}
 
 	@Override
@@ -130,23 +130,24 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 			else if(playerState == -1){
 				gui.createDeadMenu(characterSprite.getScore(), windowFrame);
 
-				String filename = "localLeaderboard";
 				//File dir = getContext().getFilesDir();
 				//File file = new File(dir, filename);
 				//boolean deleted = file.delete();
 				ArrayList<String> scores = new ArrayList<>();
 
 				for(int i = 0; i < 10; i++){
-					scores.add(i, "0\n\r");
+					scores.add(i, "0");
 				}
 
 				try{
-					FileInputStream boardsFileContent = getContext().openFileInput(filename);
+					FileInputStream boardsFileContent = getContext().openFileInput(Globals.leaderBoardPath);
 					BufferedReader reader = new BufferedReader(new InputStreamReader(boardsFileContent));
 					String line;
+					int index = 0;
 					while ((line = reader.readLine()) != null){
-						scores.add(0, line);
+						scores.add(index, line);
 						Log.d("debug", "line: " + line);
+						index++;
 					}
 
 					boardsFileContent.close();
@@ -161,25 +162,20 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 				boolean addedNewScore = false;
 				String output = "";
 				for (int i = 0; i < 10; i++) {
-
+					//String scoreRaw = scores.get(i);
+					//String value = scoreRaw.split("\r")[0];
 					if(!addedNewScore && characterSprite.getScore() >= Integer.valueOf(scores.get(i))){
 						addedNewScore = true;
-						scores.add(i, String.valueOf(characterSprite.getScore()) + "\n\r");
+						scores.add(i, String.valueOf(characterSprite.getScore()));
 					}
-					output = output.concat(scores.get(i));
+					output = output.concat(scores.get(i)).concat("\r");
 					Log.d("debug", "update output: " + output);
 
 				}
 				try {
 
-					if(scores.isEmpty()){
-						scores.add(String.valueOf(characterSprite.getScore()) + "\n");
-						output = output.concat(scores.get(0));
-						Log.d("debug", "empty output: " + output);
-					}
-
 					FileOutputStream outputStream;
-					outputStream = getContext().openFileOutput(filename, Context.MODE_PRIVATE);
+					outputStream = getContext().openFileOutput(Globals.leaderBoardPath, Context.MODE_PRIVATE);
 
 					outputStream.write(output.getBytes());
 
@@ -243,6 +239,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 			int guiState = gui.drawDeadMenu(canvas);
 			if(guiState == 2){
 				reset(windowFrame.centerX(), windowFrame.centerY());
+			}
+			else if(guiState == 3){
+				Activity gameActivity = (Activity)getContext();
+				gameActivity.finish();
 			}
 		}
 	}

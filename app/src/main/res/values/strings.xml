@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">lab3</string>
+    <string name="appName">Getting Air</string>
+    <string name="menuPlay">Play</string>
+    <string name="localBoard">Local Leaderboard</string>
+    <string name="menuPref">Preferences</string>
+    <string name="BackOption">Back</string>
 </resources>

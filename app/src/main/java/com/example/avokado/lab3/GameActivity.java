@@ -18,7 +18,7 @@ https://www.androidauthority.com/android-game-java-785331/
 
 // This activity should be main menu
 
-public class MainActivity extends AppCompatActivity implements SensorEventListener{
+public class GameActivity extends AppCompatActivity implements SensorEventListener{
 
 	// accelerometer
 	private SensorManager mSensorManager;
@@ -31,9 +31,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		Log.d("debug", "onCreate: " + "hello from game");
+
 		mPrefs = getPreferences(MODE_PRIVATE);
 
-		theGame = new GameView(this);
+		theGame = new GameView(GameActivity.this);
 
 		super.onCreate(savedInstanceState);
 		setContentView(theGame);

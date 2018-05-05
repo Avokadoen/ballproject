@@ -49,6 +49,9 @@ public class GUI {
 						if(retryRect.contains(x, y)){
 							guiState = 2;
 						}
+						else if(menuRect.contains(x, y)){
+							guiState = 3;
+						}
 						break;
 				}
 
@@ -88,16 +91,23 @@ public class GUI {
 		Canvas canvas = new Canvas(deadMenu);
 		Matrix transform = new Matrix();
 		transform.setTranslate(deadMessage.getWidth()/2, frame.height()/6);
-		//Paint background = new Paint();
-		//background.setARGB(100, 255, 255, 255);
+
+		// draw menu background
 		canvas.drawARGB(140, 0, 0, 0);
 		canvas.drawBitmap(deadMessage, transform, null);
+
+		// Create the "to menu" option and its hitbox for click
 		transform.setTranslate(deadMessage.getWidth() - menuOption.getWidth(), frame.height()/2);
 		canvas.drawBitmap(menuOption, transform, null);
+		menuRect = new RectF(0, 0, menuOption.getWidth(), menuOption.getHeight());
+		transform.mapRect(menuRect);
+
+		// Create the "retry" option and its hitbox for click
 		transform.setTranslate(deadMessage.getWidth() , frame.height()/2);
 		canvas.drawBitmap(retryOption, transform, null);
 		retryRect = new RectF(0, 0, retryOption.getWidth(), retryOption.getHeight());
 		transform.mapRect(retryRect);
+
 
 		guiState = -1;
 	}
