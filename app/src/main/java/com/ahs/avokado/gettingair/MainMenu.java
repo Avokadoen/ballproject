@@ -28,7 +28,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import static android.preference.PreferenceManager.getDefaultSharedPreferences;
-import static com.google.android.gms.common.GooglePlayServicesUtil.isGooglePlayServicesAvailable;
 
 public class MainMenu extends AppCompatActivity {
 
@@ -63,7 +62,7 @@ public class MainMenu extends AppCompatActivity {
 		});
 
 		// Leaderboard Option - Brings up a local leaderboard up
-		findViewById(R.id.mm_loclead_bt).setOnClickListener(new View.OnClickListener() {
+		findViewById(R.id.mm_locLead_bt).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				Intent gameIntent = new Intent(MainMenu.this, LocalBoardActivity.class);
@@ -72,13 +71,13 @@ public class MainMenu extends AppCompatActivity {
 		});
 
 		// Global leaderboard Option - Brings up a global leaderboard up
-		findViewById(R.id.mm_glolead_bt).setOnClickListener(new View.OnClickListener() {
+		findViewById(R.id.mm_gloLead_bt).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				if(isSignedIn()){
 					SharedPreferences sharedPref = getDefaultSharedPreferences(getApplicationContext());
-					boolean defaultValue = false;
-					boolean dontShare = sharedPref.getBoolean(getResources().getString(R.string.shareGlobalState), defaultValue);
+
+					boolean dontShare = sharedPref.getBoolean(getResources().getString(R.string.shareGlobalState), false);
 					if(!dontShare) {
 						try {
 							FileInputStream boardsFileContent = openFileInput(Globals.leaderBoardPath);
@@ -130,9 +129,7 @@ public class MainMenu extends AppCompatActivity {
 	@Override
 	protected  void onStart(){
 		super.onStart();
-		// Check for existing Google Sign In account, if the user is already signed in
-		// the GoogleSignInAccount will be non-null.
-		signedInAccount = GoogleSignIn.getLastSignedInAccount(this);
+		signInSilently();
 	}
 
 	@Override
@@ -198,7 +195,7 @@ public class MainMenu extends AppCompatActivity {
 							// The signed in account is stored in the task's result.
 							signedInAccount = task.getResult();
 						} else {
-							// Player will need to sign-in explicitly using via UI
+							signIn();
 						}
 					}
 				});

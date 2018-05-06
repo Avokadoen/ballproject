@@ -41,7 +41,7 @@
         app:layout_constraintVertical_bias="0.178" />
 
     <Button
-        android:id="@+id/mm_loclead_bt"
+        android:id="@+id/mm_locLead_bt"
         android:layout_width="211dp"
         android:layout_height="51dp"
         android:layout_marginBottom="8dp"
@@ -57,7 +57,7 @@
         app:layout_constraintVertical_bias="0.031" />
 
     <Button
-        android:id="@+id/mm_glolead_bt"
+        android:id="@+id/mm_gloLead_bt"
         android:layout_width="211dp"
         android:layout_height="51dp"
         android:layout_marginBottom="8dp"
@@ -69,7 +69,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mm_loclead_bt"
+        app:layout_constraintTop_toBottomOf="@+id/mm_locLead_bt"
         app:layout_constraintVertical_bias="0.024" />
 
     <Button
@@ -85,7 +85,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mm_glolead_bt"
+        app:layout_constraintTop_toBottomOf="@+id/mm_gloLead_bt"
         app:layout_constraintVertical_bias="0.055" />
 
     <Button

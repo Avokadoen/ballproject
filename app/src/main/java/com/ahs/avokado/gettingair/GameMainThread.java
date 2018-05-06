@@ -4,11 +4,11 @@ import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 
 
-public class GameMainThread extends Thread {
+class GameMainThread extends Thread {
 	private boolean running;
-	public static Canvas canvas;
-	private SurfaceHolder surfaceHolder;
-	private GameView gameView;
+	private static Canvas canvas;
+	private final SurfaceHolder surfaceHolder;
+	private final GameView gameView;
 
 	public GameMainThread(SurfaceHolder surfaceHolder, GameView gameView) {
 		super();

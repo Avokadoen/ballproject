@@ -1,11 +1,9 @@
 package com.ahs.avokado.gettingair;
 
-import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.PowerManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,13 +26,11 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 	// the renderer
 	private GameView theGame;
 
-	static private SharedPreferences mPrefs;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		Log.d("debug", "onCreate: " + "hello from game");
 
-		mPrefs = getPreferences(MODE_PRIVATE);
 
 		theGame = new GameView(GameActivity.this);
 
@@ -44,6 +40,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 		// retrieve hardware interface for accelerometer
 		mSensorManager = (SensorManager) this.getSystemService(SENSOR_SERVICE);
 		try {
+			assert mSensorManager != null;
 			mGravity = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 		} catch (NullPointerException ne) {
 			Log.d("SensorActivity()", "SensorActivity: null pointer exception");

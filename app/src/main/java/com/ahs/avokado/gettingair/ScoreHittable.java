@@ -8,11 +8,11 @@ import android.graphics.Paint;
 		-textAsBitmap: http://snipplr.com/view/73714/android-draw-text-to-dynamically-sized-bitmap/
 */
 
-public class ScoreHittable extends Hittable {
+class ScoreHittable extends Hittable {
 	private float imageAlpha;
 	private float lerpColorPos;
 
-	private Bitmap scoreBitmap;
+	private final Bitmap scoreBitmap;
 
 	ScoreHittable(int startX, int startY, int score, int textSize){
 		this.startX = startX;

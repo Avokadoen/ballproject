@@ -1,9 +1,5 @@
 package com.ahs.avokado.gettingair;
 
-
-import android.graphics.Rect;
-import android.util.Log;
-
 import java.util.Random;
 
 /*
@@ -13,25 +9,25 @@ import java.util.Random;
 
 class Hittable {
 
-	public int startX, startY;
-	public int endX, endY;
+	int startX;
+	int startY;
+	int endX;
+	int endY;
 	public int currentX, currentY;
 	private float width;
 	private float height;
 	private float canvasDrawAngle;
 
-	protected double speed;
+	final double speed;
 	private double lerpPos;
 
-	public Hittable(){
+	Hittable(){
 		speed = 0.25;
 		lerpPos = 0;
 	}
 
 	public Hittable(double speed, int windowX, int windowY, Random rand){ //  float width, float height,
 		this.speed 	= speed;
-		//this.width 	= width;
-		//this.height = height;
 
 		// Calculating a random start and end position for game objects
 		startX  	= (rand.nextInt((int)(windowX * 0.2)) + windowX);
