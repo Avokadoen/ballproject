@@ -2,6 +2,7 @@ package com.ahs.avokado.gettingair;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -33,6 +35,7 @@ public class MainMenu extends AppCompatActivity {
 	private GoogleSignInAccount signedInAccount;
 
 	private static final int RC_SIGN_IN = 100;
+	private static final int RC_RESOLUTION = 4;
 	private static final int RC_LEADERBOARD_UI = 9004;
 
 	@Override
@@ -46,7 +49,7 @@ public class MainMenu extends AppCompatActivity {
 				Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN).build();
 
 		// Build a GoogleSignInClient with the options specified by gso.
-		client = GoogleSignIn.getClient(this, gso);
+  		client = GoogleSignIn.getClient(this, gso);
 
 		signIn();
 
@@ -124,7 +127,7 @@ public class MainMenu extends AppCompatActivity {
 	@Override
 	protected  void onStart(){
 		super.onStart();
-		signInSilently();
+		//signInSilently();
 	}
 
 	@Override
@@ -143,6 +146,19 @@ public class MainMenu extends AppCompatActivity {
 			// a listener.
 			Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
 			handleSignInResult(task);
+		}
+		else if(requestCode == RC_RESOLUTION){
+			if(resultCode == RESULT_OK){
+				signIn();
+			}
+			else{
+				CharSequence text = "failed to retrieve google play account";
+				int duration = Toast.LENGTH_LONG;
+
+				Context context = getApplicationContext();
+				Toast toast = Toast.makeText(context, text, duration);
+				toast.show();
+			}
 		}
 	}
 
@@ -170,8 +186,15 @@ public class MainMenu extends AppCompatActivity {
 			// The ApiException status code indicates the detailed failure reason.
 			// Please refer to the GoogleSignInStatusCodes class reference for more information.
 			Log.w("debug", "signInResult:failed code=" + e.getStatusCode());
-			//updateUI(null);
-
+			Status status = new Status(e.getStatusCode());
+			if(status.hasResolution()){
+				try{
+					status.startResolutionForResult(this, RC_RESOLUTION);
+				}
+				catch (IntentSender.SendIntentException ie){
+					Log.d("debug", "handleSignInResult: " + ie.getMessage());
+				}
+			}
 		}
 	}
 

@@ -1,3 +1,5 @@
+## Warning: as of 7.may we have noticed that the google play integration is bugged on SDK 25 and under
+
 # Mobile Project "Getting Air" (Ball(oon) Game)
 
 **Project: Avoid spikes by moving mobile and pick up oxygen to increase score.**
