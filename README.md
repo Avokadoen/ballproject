@@ -15,7 +15,10 @@
 - Alternatively, activate an emulator and/or plug inn an android phone and press the run button on the top right
 
 
-
+##### [Project Report](Project-Report.md)
+##### [To-Do List](TODO-LIST.md)
+##### [Known-Bugs List](KNOWN-BUGS.md)
+##### [Project Report](Project-Report.md)
 
 
 
