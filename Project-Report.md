@@ -20,10 +20,7 @@ At the end of each day, we usually tried to wrap up what we had done, and what w
 a "To-Do"-list, and a "Known-Bugs"-list, to get some overview of things that we would have to work on.
 
 ## Design
-
-
-## About
-
+![Icon](assets project files/protoIcon_1_00013.png?raw=true "Title")
 
 ## Features Included
 
