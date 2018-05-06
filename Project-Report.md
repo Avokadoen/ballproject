@@ -88,3 +88,4 @@ a "To-Do"-list, and a "Known-Bugs"-list, to get some overview of things that we 
 - Thread-Safe variables (AtomicInteger's, ConcurrentLinkedQueue's)
 - Bitmaps takes a lot of performance -> achieving good performance can be hard (optimization is important)
 - Saving some application data as files (rather than preferences)
+- Android assets tool
