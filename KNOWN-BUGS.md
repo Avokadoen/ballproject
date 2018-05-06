@@ -29,6 +29,11 @@ level 3: Game breaking in nature. Will probably have the same origin as a level 
 
 ## LEVEL 2:
 
+##### Global Leaderboards not working properly
+- Description: Sometimes, certain units will not connect properly to the global Leaderboards
+- Possible solution: Change the way we do login to Google Play (/or do a different check when trying to load leaderboards)
+- Cause: Guess: Possibly not connected properly to Google Play, or isSignedIn()-function is not working properly
+
 ##### Stuck in corner
 - Description: When the balloon scales by a corner it can scale beyond the frame
 - Possible solution:
