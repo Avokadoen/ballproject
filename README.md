@@ -1,11 +1,23 @@
-# mobile project
-project: avoid dangers by moving mobile and keep the ball intact.
+# Mobile Project "Getting Air" (Ball(oon) Game)
+
+**Project: Avoid spike-objects by moving mobile and pick-up oxygen to increase score.**
+
+## Authors
+- [Aksel Hjerpbakk](https://github.com/Avokadoen) (997816)
+- [Nikolai Åkerholt](https://github.com/akerholten) (473184)
+- [Mathias Stifjeld](https://github.com/mathisti) (473199)
 
 
-This code is a modified version of the following tutorial:
+
+## To build with android studio:
+- Open the repo folder as a project in android studio
+- Press build -> build APK(s)
+- Alternatively, activate an emulator and/or plug inn an android phone and press the run button on the top right
+
+
+
+
+
+
+Some sources:
 https://www.androidauthority.com/android-game-java-785331/
-
-to build with android studio:
-- open the repo folder as a project in android studio
-- press build -> build APK(s)
-- alternativly, activate an emulator and/or plug inn an android phone and press the run button on the top right
