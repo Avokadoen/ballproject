@@ -15,7 +15,7 @@ public class HittableController {
 	static private int imgSizeY;
 	private int frameWidth;
 	private int frameHeight;
-	static private int atomicPrecision = 10000;
+	static private int atomicPrecision = 10000; // Variable used to make AtomicInteger checks more precise
 
 	private float oxygenRatio;
 	private float spikeRatio;
@@ -47,12 +47,13 @@ public class HittableController {
 
 		float sWidth = spikeImage.getWidth();
 		float sHeight = spikeImage.getHeight();
-		spikeRatio = ( sWidth / sHeight);
+		spikeRatio = ( sWidth / sHeight);	// Ratio for proper difference in width/height for assets
 
 		float oWidth = oxygenImage.getWidth();
 		float oHeight = oxygenImage.getHeight();
-		oxygenRatio = ( oWidth / oHeight);
+		oxygenRatio = ( oWidth / oHeight);	// Ratio for proper difference in width/height for assets
 
+		// Initialize values for spawn interval
 		this.oxygenSpawnInterval 	= new AtomicInteger();
 		this.spikesSpawnInterval 	= new AtomicInteger();
 		oxygenSpawnIntervalCounter 	= new AtomicInteger();
@@ -63,8 +64,8 @@ public class HittableController {
 		this.spikesSpawnInterval.addAndGet((int)(spikesSpawnInterval*atomicPrecision));
 		this.oxygenImage 			= Bitmap.createScaledBitmap(oxygenImage, (int)(imgSizeX * oxygenRatio), imgSizeY, false);
 		this.spikeImage				= Bitmap.createScaledBitmap(spikeImage,  (int)(imgSizeX * spikeRatio), imgSizeY, false);
-		this.oxygenImage.setDensity(this.oxygenImage.getDensity()/2);
-		this.spikeImage.setDensity(this.spikeImage.getDensity()/2);
+		this.oxygenImage.setDensity(this.oxygenImage.getDensity()/2);	// Setting the pixel density lower for bitmaps to increase performance
+		this.spikeImage.setDensity(this.spikeImage.getDensity()/2);		// Setting the pixel density lower for bitmaps to increase performance
 
 		oxygen = new ConcurrentLinkedQueue<Hittable>();
 		spikes = new ConcurrentLinkedQueue<Hittable>();
@@ -76,39 +77,44 @@ public class HittableController {
 	*/
 	public int update(double deltaTime, CharacterSprite player){
 
+		// Increase counter for each loop with deltaTime
 		oxygenSpawnIntervalCounter.addAndGet((int)(deltaTime*atomicPrecision));
-		if( oxygenSpawnIntervalCounter.intValue() >= oxygenSpawnInterval.intValue()){
-			double speed = (rand.nextDouble() / 12) + 0.06;
-			Hittable newOxygen = new Hittable(speed, frameWidth, frameHeight, rand);
-			oxygen.add(newOxygen);
-			oxygenSpawnIntervalCounter.addAndGet(-oxygenSpawnIntervalCounter.intValue());
+		if( oxygenSpawnIntervalCounter.intValue() >= oxygenSpawnInterval.intValue()){		// When counter hits or exceeds spawn-rate variable
+			double speed = (rand.nextDouble() / 12) + 0.06;									// Init random speed, with a default min speed of 0.06+
+			Hittable newOxygen = new Hittable(speed, frameWidth, frameHeight, rand);		// Create object
+			oxygen.add(newOxygen);															// Adding object to the ConcurrentLinkedQueue
+			oxygenSpawnIntervalCounter.addAndGet(-oxygenSpawnIntervalCounter.intValue());	// Decrease IntervalCounter to maintain the spawn-rate
 		}
 
+		// Increase counter for each loop with deltaTime
 		spikesSpawnIntervalCounter.addAndGet((int)(deltaTime*atomicPrecision));
-		if(spikesSpawnIntervalCounter.intValue() >= spikesSpawnInterval.intValue()){
-			double speed = (rand.nextDouble() / 14) + 0.06;
-			Hittable newOxygen = new Hittable(speed, frameWidth, frameHeight, rand);
-			spikes.add(newOxygen);
-			spikesSpawnIntervalCounter.addAndGet(-spikesSpawnIntervalCounter.intValue());
+		if(spikesSpawnIntervalCounter.intValue() >= spikesSpawnInterval.intValue()){		// When counter hits or exceeds spawn-rate variable
+			double speed = (rand.nextDouble() / 14) + 0.06;									// Init random speed, with a default min speed of 0.06+
+			Hittable newOxygen = new Hittable(speed, frameWidth, frameHeight, rand);		// Create Object
+			spikes.add(newOxygen);															// Adding object to the ConcurrentLinkedQueue
+			spikesSpawnIntervalCounter.addAndGet(-spikesSpawnIntervalCounter.intValue());	// Decrease IntervalCounter to maintain the spawn-rate
 		}
 		int index = -1;
 		int status = 0;
 		for (Object obj : oxygen) {
 			index++;
 			if (obj != null && obj instanceof Hittable) {
-				if(((Hittable) obj).move(deltaTime)){
-					oxygen.remove(obj);
+				if(((Hittable) obj).move(deltaTime)){	// Moves the object, and checks if it's lerp-movement is done
+					oxygen.remove(obj);					// Remove the object if it's movement is done (off-screen)
 				}
 				Matrix matrix = new Matrix();
+				// Retrieving and setting the proper rotation
 				matrix.setRotate(((Hittable) obj).getCanvasDrawAngle(), 0, 0);
 				matrix.postTranslate(((Hittable) obj).currentY, ((Hittable) obj).currentX);
+				// Constructing hitbox
 				RectF hitbox = new RectF(0, 0,
 						oxygenImage.getWidth(), oxygenImage.getHeight());
 				matrix.mapRect(hitbox);
-				if(player.checkContact(hitbox)){
-					oxygen.remove(obj);
-					status += 1;
+				if(player.checkContact(hitbox)){		// Check for collision with player
+					oxygen.remove(obj);					// Remove object that collided with player
+					status += 1;						// Counting a status for "score", if the player would collide with more than one object in one frame
 
+					// Creating a floating score text to display score to the player
 					ScoreHittable newScore = new ScoreHittable
 							(((Hittable) obj).currentY, ((Hittable) obj).currentX,
 									player.getScore() + 10, frameWidth / 25);
@@ -121,26 +127,28 @@ public class HittableController {
 		for (Object obj : spikes) {
 			index++;
 			if (obj != null && obj instanceof Hittable) {
-				if(((Hittable) obj).move(deltaTime)){
-					spikes.remove(obj);
+				if(((Hittable) obj).move(deltaTime)){	// Moves the object, and checks if it's lerp-movement is done
+					spikes.remove(obj);					// Remove the object if it's movement is done (off-screen)
 				}
 				Matrix matrix = new Matrix();
+				// Retrieving and setting the proper rotation
 				matrix.setRotate(((Hittable) obj).getCanvasDrawAngle(), 0, 0);
 				matrix.postScale(0.8f, 0.8f);
 				matrix.postTranslate(((Hittable) obj).currentY, ((Hittable) obj).currentX);
 				//matrix.postScale(0.9f, 0f;
+				// Constructing hitbox
 				RectF hitbox = new RectF(0, 0,
 						spikeImage.getWidth(), spikeImage.getHeight());
 				matrix.mapRect(hitbox);
 
-				if(player.checkContact(hitbox)){
+				if(player.checkContact(hitbox)){		// Check for collision with player
 					//spikes.remove(obj);
-					return -1;
+					return -1;							// Returns -1 as playerStatus (dead)
 				}
 			}
 		}
 		index = -1;
-		for (Object obj : scores) {
+		for (Object obj : scores) {			// Updating the displaying scores to the player
 			index++;
 			if (obj != null && obj instanceof ScoreHittable) {
 				if (((ScoreHittable) obj).moveAndLerpColor(deltaTime)) {

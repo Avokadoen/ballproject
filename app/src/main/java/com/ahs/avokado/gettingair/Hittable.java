@@ -32,6 +32,8 @@ class Hittable {
 		this.speed 	= speed;
 		//this.width 	= width;
 		//this.height = height;
+
+		// Calculating a random start and end position for game objects
 		startX  	= (rand.nextInt((int)(windowX * 0.2)) + windowX);
 		startY		= rand.nextInt(windowY*2);
 		endY		= rand.nextInt(windowY*2);
@@ -41,6 +43,7 @@ class Hittable {
 		currentY = startY;
 
 		lerpPos = 0;
+		// Randomizing if start and end pos should be flipped to make objects come from both sides of the screen
 		boolean down = rand.nextBoolean();
 		if(down) {
 			startX -= windowX;
@@ -48,6 +51,8 @@ class Hittable {
 			endX *= -1;
 		}
 
+
+		// Calculating the proper rotation for the game objects to match it's movement
 		float vectorX = endX - startX;
 		float vectorY = endY - startY;
 		canvasDrawAngle = 0;

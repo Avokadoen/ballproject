@@ -119,6 +119,7 @@ public class CharacterSprite {
 			}
 		}
 
+		// Rotating bitmap to match proper input from the user
 		float newAngle = 0;
 		if(gravy <= 0.01  && gravy >= -0.01 ) {
 			if(gravx > 0) newAngle = -90;

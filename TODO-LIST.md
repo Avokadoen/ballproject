@@ -60,3 +60,8 @@
 - Description: scale down hitboxes
 - Possible solution:
 - state:
+
+# Make test "game" in dev console for debugging on separate computers
+- Description: Make a version of the game that is for testing purposes, for handling different keys when debugging
+- Possible solution:
+- state:

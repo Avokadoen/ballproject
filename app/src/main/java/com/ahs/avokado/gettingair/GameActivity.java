@@ -17,7 +17,7 @@ import android.view.WindowManager;
 https://www.androidauthority.com/android-game-java-785331/
 */
 
-// This activity should be main menu
+// This activity prepares the Game-states and GameView for playing the game
 
 public class GameActivity extends AppCompatActivity implements SensorEventListener{
 

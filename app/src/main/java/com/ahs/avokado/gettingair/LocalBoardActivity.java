@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+
+// Local Leaderboard activity
 public class LocalBoardActivity extends AppCompatActivity {
 
 	@Override
@@ -23,11 +25,11 @@ public class LocalBoardActivity extends AppCompatActivity {
 
 		ArrayList<String> scores = new ArrayList<>();
 
-		for(int i = 0; i < 10; i++){
+		for(int i = 0; i < 10; i++){			// This is done to ensure there are no NULL-values in the Score List
 			scores.add(i, "0");
 		}
 
-		try{
+		try{	// Try to read from leaderboard file, and put the values into the score list
 			FileInputStream boardsFileContent = this.openFileInput(Globals.leaderBoardPath);
 			BufferedReader reader = new BufferedReader(new InputStreamReader(boardsFileContent));
 			String line;
@@ -48,7 +50,7 @@ public class LocalBoardActivity extends AppCompatActivity {
 			Log.d("debug", "update: " + e.getCause());
 		}
 
-		// fill leaderboard with previous scores
+		// Fill leaderboard with previous scores
 		for(int i = 1; i <= 10; i++){
 			TextView score = findViewById(getResources().getIdentifier("lb_score" + i + "_tv", "id", getPackageName()));
 			if(Integer.valueOf(scores.get(i-1)) > 0 ){

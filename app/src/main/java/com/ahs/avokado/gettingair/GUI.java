@@ -24,7 +24,7 @@ import static android.content.Context.MODE_PRIVATE;
 // kanskje random/basert på score melding
 
 public class GUI {
-	int guiState;
+	int guiState; // Different states for the menu, that are also accessed in the GameView for input from the user
 	Bitmap deadMenu;
 
 	private int scores[];
@@ -46,9 +46,11 @@ public class GUI {
 					case MotionEvent.ACTION_MOVE:
 						break;
 					case MotionEvent.ACTION_UP:
+						// Retry
 						if(retryRect.contains(x, y)){
 							guiState = 2;
 						}
+						// Back to menu
 						else if(menuRect.contains(x, y)){
 							guiState = 3;
 						}
@@ -62,7 +64,6 @@ public class GUI {
 	};
 
 	GUI(){
-
 		guiState = 0;
 	}
 

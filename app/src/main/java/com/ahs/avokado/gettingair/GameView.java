@@ -155,11 +155,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 				//boolean deleted = file.delete();
 				ArrayList<String> scores = new ArrayList<>();
 
-				for(int i = 0; i < 10; i++){
+				for(int i = 0; i < 10; i++){		// This is done to ensure there are no NULL-values in the Score List
 					scores.add(i, "0");
 				}
 
-				try{
+				try{	// Try to read from leaderboard file, and put the values into the score list
 					FileInputStream boardsFileContent = getContext().openFileInput(Globals.leaderBoardPath);
 					BufferedReader reader = new BufferedReader(new InputStreamReader(boardsFileContent));
 					String line;
@@ -184,10 +184,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 				for (int i = 0; i < 10; i++) {
 					//String scoreRaw = scores.get(i);
 					//String value = scoreRaw.split("\r")[0];
+					// If the player got a better score than what is already in the list
 					if(!addedNewScore && characterSprite.getScore() >= Integer.valueOf(scores.get(i))){
 						addedNewScore = true;
-						scores.add(i, String.valueOf(characterSprite.getScore()));
+						scores.add(i, String.valueOf(characterSprite.getScore()));	// Adding score
 					}
+					// Preparing output for the leaderboard file
 					output = output.concat(scores.get(i)).concat("\r");
 					Log.d("debug", "update output: " + output);
 
@@ -196,7 +198,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
 					FileOutputStream outputStream;
 					outputStream = getContext().openFileOutput(Globals.leaderBoardPath, Context.MODE_PRIVATE);
-
+					// Writing to the leaderboard file
 					outputStream.write(output.getBytes());
 
 					//File dir = getContext().getFilesDir();
@@ -254,13 +256,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 		hittableController.draw(canvas);
 		characterSprite.draw(canvas);
 
-
+		// Show Menu when dead
 		if(playerState == -1){
+			// Get player input from the gui and react accordingly
 			int guiState = gui.drawDeadMenu(canvas);
-			if(guiState == 2){
+			if(guiState == 2){ // Retry
 				reset(windowFrame.centerX(), windowFrame.centerY());
 			}
-			else if(guiState == 3){
+			else if(guiState == 3){ // Back to main menu
 				Activity gameActivity = (Activity)getContext();
 				gameActivity.finish();
 			}
