@@ -50,3 +50,13 @@
 - Description: Sounds to reflect actions done by player and to indicate game information
 - Possible solution:
 - state:
+
+# death frame
+- Description: a frame of balloon when it pop
+- Possible solution:
+- state:
+
+# scale hitboxes
+- Description: scale down hitboxes
+- Possible solution:
+- state:

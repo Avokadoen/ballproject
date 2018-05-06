@@ -3,6 +3,7 @@
     package="com.ahs.avokado.gettingair">
 
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"

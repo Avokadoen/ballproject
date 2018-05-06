@@ -1,11 +1,13 @@
 package com.ahs.avokado.gettingair;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -66,6 +68,14 @@ public class MainMenu extends AppCompatActivity {
 			public void onClick(View view) {
 				if(isSignedIn()){
 					showLeaderboard();
+				}
+				else{
+					CharSequence text = "you are not signed in";
+					int duration = Toast.LENGTH_LONG;
+
+					Context context = getApplicationContext();
+					Toast toast = Toast.makeText(context, text, duration);
+					toast.show();
 				}
 			}
 		});

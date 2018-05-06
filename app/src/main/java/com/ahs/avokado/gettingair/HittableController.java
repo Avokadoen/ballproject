@@ -102,11 +102,9 @@ public class HittableController {
 				Matrix matrix = new Matrix();
 				matrix.setRotate(((Hittable) obj).getCanvasDrawAngle(), 0, 0);
 				matrix.postTranslate(((Hittable) obj).currentY, ((Hittable) obj).currentX);
-				RectF hitboxFloat = new RectF(0, 0,
+				RectF hitbox = new RectF(0, 0,
 						oxygenImage.getWidth(), oxygenImage.getHeight());
-				matrix.mapRect(hitboxFloat);
-				Rect hitbox = new Rect
-						((int)hitboxFloat.left, (int)hitboxFloat.top, (int)hitboxFloat.right, (int)hitboxFloat.bottom);
+				matrix.mapRect(hitbox);
 				if(player.checkContact(hitbox)){
 					oxygen.remove(obj);
 					status += 1;
@@ -128,12 +126,13 @@ public class HittableController {
 				}
 				Matrix matrix = new Matrix();
 				matrix.setRotate(((Hittable) obj).getCanvasDrawAngle(), 0, 0);
+				matrix.postScale(0.8f, 0.8f);
 				matrix.postTranslate(((Hittable) obj).currentY, ((Hittable) obj).currentX);
-				RectF hitboxFloat = new RectF(0, 0,
+				//matrix.postScale(0.9f, 0f;
+				RectF hitbox = new RectF(0, 0,
 						spikeImage.getWidth(), spikeImage.getHeight());
-				matrix.mapRect(hitboxFloat);
-				Rect hitbox = new Rect
-						((int)hitboxFloat.left, (int)hitboxFloat.top, (int)hitboxFloat.right, (int)hitboxFloat.bottom);
+				matrix.mapRect(hitbox);
+
 				if(player.checkContact(hitbox)){
 					//spikes.remove(obj);
 					return -1;

@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.Log;
 
 import static android.content.ContentValues.TAG;
@@ -182,10 +183,14 @@ public class CharacterSprite {
 		return target.contains(self);
 	}
 
-	public boolean checkContact(Rect target){
-		Rect self = new Rect
-				((int)(x),(int)(y), (int)(x + image.getWidth()), (int)(y + image.getHeight()));
+	public boolean checkContact(RectF target){
 
+		RectF self = new RectF(0,0, image.getWidth(), image.getHeight());
+
+		Matrix transform = new Matrix();
+		transform.setScale(0.9f,0.9f);
+		transform.postTranslate(x, y);
+		transform.mapRect(self);
 
 		// rtr true if param contains sprite, false otherwise
 		return target.intersect(self);
@@ -211,6 +216,10 @@ public class CharacterSprite {
 		vely 			= 0;
 		characterScale 	= 0.02f;
 		score 			= 0;
+
+		imgSizeX = (int)(screenWidth * characterScale);
+		imgSizeY = (int)((screenWidth * characterScale) * ratio);
+		originalImage = Bitmap.createScaledBitmap(originalOriginalImage, imgSizeY, imgSizeX, false);
 	}
 
 	public int getScore(){

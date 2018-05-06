@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.media.MediaPlayer;
+import android.os.PowerManager;
 import android.os.Vibrator;
 import android.util.Log;
 import android.view.SurfaceView;
@@ -24,6 +25,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+
+import static android.content.Context.POWER_SERVICE;
 
 // todo: cosmetic: balloon pop frame on death
 // todo: reset functions for retry option
@@ -50,6 +53,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 	private Vibrator vibrator;
 	private float effectInterval;
 	public static boolean startEffects;
+
+	private PowerManager.WakeLock wakeLock;
 
 	// toggle thread
 	public boolean running = false;
@@ -78,6 +83,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
+
+		PowerManager powerManager = (PowerManager) getContext().getApplicationContext().getSystemService(POWER_SERVICE);
+		wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+				"MyWakelockTag");
+		wakeLock.acquire();
+
 		// get screen properties
 		Rect frame = holder.getSurfaceFrame();
 
@@ -118,6 +129,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 			}
 			retry = false;
 		}
+
+		wakeLock.release();
 	}
 
 	public void update(double deltaTime) {
