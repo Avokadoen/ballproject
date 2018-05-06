@@ -13,9 +13,8 @@ class Hittable {
 	int startY;
 	int endX;
 	int endY;
-	public int currentX, currentY;
-	private float width;
-	private float height;
+	int currentX, currentY;
+
 	private float canvasDrawAngle;
 
 	final double speed;

@@ -12,11 +12,11 @@ class CharacterSprite {
 	private Bitmap originalImage;
 	private Bitmap image;
 
-	private float prevx, prevy;
+	private float prevX, prevY;
 	private float x, y;
-	private float velx, vely;
-	private float gravx, gravy;
-	private final float fallvel;
+	private float velX, velY;
+	private float gravityX, gravityY;
+	private final float fallVel;
 	private final float maxSpeed;
 	private final float ratio;
 	private float characterScale;
@@ -41,6 +41,8 @@ class CharacterSprite {
 		characterScale = 0.02f;
 		originalOriginalImage = bmp;
 		originalOriginalImage.setDensity(originalOriginalImage.getDensity()/2);
+
+		// because of landscape mode these are flipped
 		imgSizeX = (int)(size * characterScale);
 		imgSizeY = (int)((size * characterScale) * ratio);
 		originalImage = Bitmap.createScaledBitmap(bmp, imgSizeY, imgSizeX, false);
@@ -52,15 +54,15 @@ class CharacterSprite {
 		x = X;
 		y = Y;
 
-		velx = 0;
-		vely = 0;
-		gravx = 0;
-		gravy = 0;
-		fallvel = size * 0.6f;
-		maxSpeed = fallvel * 30f;
+		velX = 0;
+		velY = 0;
+		gravityX = 0;
+		gravityY = 0;
+		fallVel = size * 0.6f;
+		maxSpeed = fallVel * 30f;
 		frameCollision = false;
 		image = originalImage;
-		//rotateBitmap(angle);
+
 	}
 
 	public void draw(Canvas canvas) {
@@ -85,8 +87,8 @@ class CharacterSprite {
 
 	public void update(double deltaTime){
 		// save previous positions for collisions
-		prevx = x;
-		prevy = y;
+		prevX = x;
+		prevY = y;
 
 		// if sprite collided in this frame
 		if(frameCollision){
@@ -97,45 +99,45 @@ class CharacterSprite {
 			float frameMaxSpeed = (float)(maxSpeed * deltaTime);
 
 			// calculate the velocity of the sprite
-			velx -= (gravx * fallvel * deltaTime)*0.6;
-			vely -= (gravy * fallvel * deltaTime)*0.6;
+			velX -= (gravityX * fallVel * deltaTime)*0.6;
+			velY -= (gravityY * fallVel * deltaTime)*0.6;
 
 			// check if max has been reached
-			if(velx > frameMaxSpeed){
-				velx = frameMaxSpeed;
+			if(velX > frameMaxSpeed){
+				velX = frameMaxSpeed;
 			}
-			else if(velx < -frameMaxSpeed){
-				velx = -frameMaxSpeed;
+			else if(velX < -frameMaxSpeed){
+				velX = -frameMaxSpeed;
 			}
-			if(vely > frameMaxSpeed){
-				vely = frameMaxSpeed;
+			if(velY > frameMaxSpeed){
+				velY = frameMaxSpeed;
 			}
-			else if(vely < -frameMaxSpeed){
-				vely = -frameMaxSpeed;
+			else if(velY < -frameMaxSpeed){
+				velY = -frameMaxSpeed;
 			}
 		}
 
 		// Rotating bitmap to match proper input from the user
 		float newAngle;
-		if(gravy <= 0.01  && gravy >= -0.01 ) {
-			if(gravx > 0) newAngle = -90;
+		if(gravityY <= 0.01  && gravityY >= -0.01 ) {
+			if(gravityX > 0) newAngle = -90;
 			else newAngle = 90;
 
 		}
 		else{
-			newAngle = (float)Math.toDegrees(Math.atan((gravx * deltaTime)/(gravy * deltaTime))) * -1;
-			if(gravy < 0) newAngle += 180;
+			newAngle = (float)Math.toDegrees(Math.atan((gravityX * deltaTime)/(gravityY * deltaTime))) * -1;
+			if(gravityY < 0) newAngle += 180;
 		}
 
 		rotateBitmap(newAngle, deltaTime);
 
 		// move sprite
-		y += vely * deltaTime;
-		x += velx * deltaTime;
+		y += velY * deltaTime;
+		x += velX * deltaTime;
 
 		// apply drag
-		vely -= vely * deltaTime * 2;
-		velx -= velx * deltaTime * 2;
+		velY -= velY * deltaTime * 2;
+		velX -= velX * deltaTime * 2;
 
 	}
 
@@ -147,8 +149,8 @@ class CharacterSprite {
 			y = 0;
 		}
 		// feed accelerometer data to sprite
-		gravx = x;
-		gravy = y;
+		gravityX = x;
+		gravityY = y;
 	}
 
 	public void collided(){
@@ -157,18 +159,18 @@ class CharacterSprite {
 
 		// if ball has left frame with applied inset
 		if(x + imgSizeX > screenWidth - inset){ // if ball hit right wall
-			velx = -velx * 0.9f;
+			velX = -velX * 0.9f;
 		}
 		else if (x < inset){ 					// if ball hit left wall
-			velx = -velx * 0.9f;
+			velX = -velX * 0.9f;
 		}
 		else { 									// if ball hit top or bottom
-			vely = -vely * 0.9f;
+			velY = -velY * 0.9f;
 		}
 
 		// move sprite back to previous position to fix any issued with collision
-		x = prevx;
-		y = prevy;
+		x = prevX;
+		y = prevY;
 		frameCollision = true;
 	}
 
@@ -205,12 +207,12 @@ class CharacterSprite {
 	}
 
 	void reset(int x, int y){
-		prevx 			= x;
-		prevy 			= y;
+		prevX 			= x;
+		prevY 			= y;
 		this.x 			= x;
 		this.y 			= y;
-		velx 			= 0;
-		vely 			= 0;
+		velX 			= 0;
+		velY 			= 0;
 		characterScale 	= 0.02f;
 		score 			= 0;
 

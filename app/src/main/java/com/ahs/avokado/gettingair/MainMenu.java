@@ -16,14 +16,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.games.Games;
-import com.google.android.gms.games.LeaderboardsClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
@@ -33,7 +31,7 @@ public class MainMenu extends AppCompatActivity {
 
 	private GoogleSignInClient client;
 	private GoogleSignInAccount signedInAccount;
-	private LeaderboardsClient scoreLeaderboard;
+
 	private static final int RC_SIGN_IN = 100;
 	private static final int RC_LEADERBOARD_UI = 9004;
 
@@ -88,9 +86,6 @@ public class MainMenu extends AppCompatActivity {
 							Games.getLeaderboardsClient(getApplicationContext(), signedInAccount)
 									.submitScore(getResources().getString(R.string.score_leader_id), Integer.valueOf(line));
 
-
-						} catch (FileNotFoundException e) {
-							Log.d("debug", "onClick: " + e.getMessage());
 						} catch (IOException e) {
 							Log.d("debug", "onClick: " + e.getMessage());
 						}

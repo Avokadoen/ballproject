@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -42,12 +41,10 @@ public class LocalBoardActivity extends AppCompatActivity {
 			boardsFileContent.close();
 			reader.close();
 		}
-		catch(FileNotFoundException e){
+		catch(IOException e){
 			Log.d("debug", "update: " + e.getCause());
 		}
-		catch (IOException e){
-			Log.d("debug", "update: " + e.getCause());
-		}
+
 
 		// Fill leaderboard with previous scores
 		for(int i = 1; i <= 10; i++){

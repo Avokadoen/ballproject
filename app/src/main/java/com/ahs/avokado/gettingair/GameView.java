@@ -21,7 +21,6 @@ import com.google.android.gms.games.Games;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -86,16 +85,17 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 
-		PowerManager powerManager = (PowerManager) getContext().getApplicationContext().getSystemService(POWER_SERVICE);
 		try{
+			PowerManager powerManager = (PowerManager) getContext().getApplicationContext().getSystemService(POWER_SERVICE);
 			wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
 					"MyWakelockTag");
+
+			long timeOut = 600000; // lock cpu for 10 min unless surface destroyed
+			wakeLock.acquire(timeOut);
 		}
 		catch (NullPointerException e){
 			Log.d("debug", "surfaceCreated: " + e.getMessage());
 		}
-		long timeOut = 600000; // lock cpu for 10 min unless surface destroyed
-		wakeLock.acquire(timeOut);
 
 		// get screen properties
 		Rect frame = holder.getSurfaceFrame();
@@ -114,7 +114,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 				new HittableController(
 						frame.width(), frame.height(), 1f, 1f,
 						BitmapFactory.decodeResource(getResources(), R.drawable.oxygen),
-						BitmapFactory.decodeResource(getResources(), R.drawable.spike), gui);
+						BitmapFactory.decodeResource(getResources(), R.drawable.spike));
 
 		// initialize the game thread
 		running = true;
@@ -151,8 +151,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 			else if(playerState == -1){
 				SharedPreferences sharedPref = getDefaultSharedPreferences(getContext().getApplicationContext());
 
-				boolean dontShare = sharedPref.getBoolean(getResources().getString(R.string.shareGlobalState), false);
-				if(!dontShare){
+				boolean doShare = !(sharedPref.getBoolean(getResources().getString(R.string.shareGlobalState), false));
+				if(doShare){
 					GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getContext());
 					if(account != null){
 						Games.getLeaderboardsClient(getContext(), account)
@@ -183,12 +183,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 					boardsFileContent.close();
 					reader.close();
 				}
-				catch(FileNotFoundException e){
+				catch(IOException e){
 					Log.d("debug", "update: " + e.getCause());
 				}
-				catch (IOException e){
-					Log.d("debug", "update: " + e.getCause());
-				}
+
 				boolean addedNewScore = false;
 				String output = "";
 				for (int i = 0; i < 10; i++) {

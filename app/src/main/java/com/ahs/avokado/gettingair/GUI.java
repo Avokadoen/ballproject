@@ -15,8 +15,6 @@ import android.view.MotionEvent;
 import android.view.View;
 
 
-// kanskje random/basert på score melding
-
 class GUI {
 	private int guiState; // Different states for the menu, that are also accessed in the GameView for input from the user
 	private Bitmap deadMenu;
