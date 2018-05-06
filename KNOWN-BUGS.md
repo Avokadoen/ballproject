@@ -64,6 +64,6 @@ level 3: Game breaking in nature. Will probably have the same origin as a level 
 
 ##### Spazzing
 - Description: Balloon spaz when user are doing slow movement
-- Possible solution:
+- Possible solution: Lerp the newAngle for rotation
 - Cause: accelerometer give a low magnitude vector and therefore you can change rotation
        too fast.

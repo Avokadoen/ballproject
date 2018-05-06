@@ -9,19 +9,19 @@
 
 
 
-## To build with android studio:
+### To build with android studio:
 - Open the repo folder as a project in android studio
 - Press build -> build APK(s)
 - Alternatively, activate an emulator and/or plug inn an android phone and press the run button on the top right
 
 
-##### [Project Report](Project-Report.md)
+#### [Project Report](Project-Report.md)
 
 
-##### [To-Do List](TODO-LIST.md)
+#### [To-Do List](TODO-LIST.md)
 
 
-##### [Known-Bugs List](KNOWN-BUGS.md)
+#### [Known-Bugs List](KNOWN-BUGS.md)
 
 
 
