@@ -24,6 +24,8 @@
 ### [Known-Bugs List](KNOWN-BUGS.md)
 
 
+#### Want alpha access?
+Contact akselhj@stud.ntnu.no
 
 
 ##### Some sources:
