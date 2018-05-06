@@ -12,14 +12,13 @@ import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 public class Preferences extends AppCompatActivity {
 
 	private SharedPreferences.Editor editor;
-	private SharedPreferences sharedPref;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_preferences);
 
-		sharedPref = getDefaultSharedPreferences(this.getApplicationContext());
+		SharedPreferences sharedPref = getDefaultSharedPreferences(this.getApplicationContext());
 		editor = sharedPref.edit();
 
 		Switch shareScore = findViewById(R.id.pr_noShare_sw);

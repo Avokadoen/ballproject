@@ -31,11 +31,10 @@ class HittableController {
 	private final Bitmap oxygenImage;
 	private final Bitmap spikeImage;
 
-	private final GUI gui;
 
-	public HittableController(int frameWidth, int frameHeight, float oxygenSpawnInterval, float spikesSpawnInterval,
-							  Bitmap oxygenImage, Bitmap spikeImage, GUI gui){
-		this.gui = gui;
+	HittableController(int frameWidth, int frameHeight, float oxygenSpawnInterval, float spikesSpawnInterval,
+							  Bitmap oxygenImage, Bitmap spikeImage){
+
 		this.frameWidth = frameWidth;
 		this.frameHeight = frameHeight;
 

@@ -1,12 +1,12 @@
 package com.ahs.avokado.gettingair;
 
 import android.graphics.Canvas;
+import android.util.Log;
 import android.view.SurfaceHolder;
 
 
 class GameMainThread extends Thread {
 	private boolean running;
-	private static Canvas canvas;
 	private final SurfaceHolder surfaceHolder;
 	private final GameView gameView;
 
@@ -22,7 +22,7 @@ class GameMainThread extends Thread {
 		double deltaTime;
 
 		while (running) {
-			canvas = null;
+			Canvas canvas = null;
 			// get time since last frame
 			deltaTime = (System.currentTimeMillis() - lastFrameTime) / 1000;
 			lastFrameTime = System.currentTimeMillis();
@@ -35,7 +35,9 @@ class GameMainThread extends Thread {
 					this.gameView.update(deltaTime);
 					this.gameView.draw(canvas);
 				}
-			} catch (Exception e) {} finally {
+			} catch (Exception e) {
+				Log.d("debug", "run: " + e.getMessage());
+			} finally {
 				if (canvas != null) {
 					try {
 						// separate canvas from surface
