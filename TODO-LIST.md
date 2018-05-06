@@ -1,11 +1,11 @@
 # TODO-LIST
 
 
-## 3. Most urgent, required features, that should be done and added firstly.
+- 3. Most urgent, required features, that should be done and added firstly.
 
-## 2. Features that are important for the current state of the application.
+- 2. Features that are important for the current state of the application.
 
-## 1. Aesthetical or Quality-of-life changes that should be done.
+- 1. Aesthetical or Quality-of-life changes that should be done.
 
 
 ###### TODO Template:
