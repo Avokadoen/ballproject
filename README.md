@@ -1,6 +1,6 @@
 # Mobile Project "Getting Air" (Ball(oon) Game)
 
-**Project: Avoid spike-objects by moving mobile and pick-up oxygen to increase score.**
+**Project: Avoid spikes by moving mobile and pick up oxygen to increase score.**
 
 ## Authors
 - [Aksel Hjerpbakk](https://github.com/Avokadoen) (997816)
