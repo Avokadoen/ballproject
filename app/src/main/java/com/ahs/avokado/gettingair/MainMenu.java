@@ -2,6 +2,7 @@ package com.ahs.avokado.gettingair;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,6 +21,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 import static com.google.android.gms.common.GooglePlayServicesUtil.isGooglePlayServicesAvailable;
 
 public class MainMenu extends AppCompatActivity {
@@ -35,6 +43,7 @@ public class MainMenu extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main_menu);
 
+		signedInAccount = null;
 
 		GoogleSignInOptions gso = new GoogleSignInOptions.
 				Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN).build();
@@ -67,6 +76,26 @@ public class MainMenu extends AppCompatActivity {
 			@Override
 			public void onClick(View view) {
 				if(isSignedIn()){
+					SharedPreferences sharedPref = getDefaultSharedPreferences(getApplicationContext());
+					boolean defaultValue = false;
+					boolean dontShare = sharedPref.getBoolean(getResources().getString(R.string.shareGlobalState), defaultValue);
+					if(!dontShare) {
+						try {
+							FileInputStream boardsFileContent = openFileInput(Globals.leaderBoardPath);
+							BufferedReader reader = new BufferedReader(new InputStreamReader(boardsFileContent));
+							String line;
+							line = reader.readLine();
+
+							Games.getLeaderboardsClient(getApplicationContext(), signedInAccount)
+									.submitScore(getResources().getString(R.string.score_leader_id), Integer.valueOf(line));
+
+
+						} catch (FileNotFoundException e) {
+							Log.d("debug", "onClick: " + e.getMessage());
+						} catch (IOException e) {
+							Log.d("debug", "onClick: " + e.getMessage());
+						}
+					}
 					showLeaderboard();
 				}
 				else{
@@ -77,6 +106,23 @@ public class MainMenu extends AppCompatActivity {
 					Toast toast = Toast.makeText(context, text, duration);
 					toast.show();
 				}
+			}
+		});
+
+		// Preference Option - Brings up a local Preference up
+		findViewById(R.id.mm_pref_bt).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Intent prefIntent = new Intent(MainMenu.this, Preferences.class);
+				startActivity(prefIntent);
+			}
+		});
+
+		// Play option - starts the game
+		findViewById(R.id.mm_exit_bt).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				finish();
 			}
 		});
 	}
@@ -138,7 +184,7 @@ public class MainMenu extends AppCompatActivity {
 	}
 
 	private boolean isSignedIn() {
-		return GoogleSignIn.getLastSignedInAccount(this) != null;
+		return signedInAccount != null;
 	}
 
 	private void signInSilently() {

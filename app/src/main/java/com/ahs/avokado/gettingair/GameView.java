@@ -2,6 +2,7 @@ package com.ahs.avokado.gettingair;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -27,6 +28,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import static android.content.Context.POWER_SERVICE;
+import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 
 // todo: cosmetic: balloon pop frame on death
 // todo: reset functions for retry option
@@ -142,10 +144,15 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 				playerState = 0;
 			}
 			else if(playerState == -1){
-				GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getContext());
-				if(account != null){
-					Games.getLeaderboardsClient(getContext(), account)
-							.submitScore(getResources().getString(R.string.score_leader_id), characterSprite.getScore());
+				SharedPreferences sharedPref = getDefaultSharedPreferences(getContext().getApplicationContext());
+				boolean defaultValue = false;
+				boolean dontShare = sharedPref.getBoolean(getResources().getString(R.string.shareGlobalState), defaultValue);
+				if(!dontShare){
+					GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getContext());
+					if(account != null){
+						Games.getLeaderboardsClient(getContext(), account)
+								.submitScore(getResources().getString(R.string.score_leader_id), characterSprite.getScore());
+					}
 				}
 
 				gui.createDeadMenu(characterSprite.getScore(), windowFrame);
