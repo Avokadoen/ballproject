@@ -90,3 +90,6 @@ a "To-Do"-list, and a "Known-Bugs"-list, to get some overview of things that we 
 - Saving some application data as files (rather than preferences)
 - Android assets tool
 - Building release APK, and conventions around this (Removing debug parameters, package naming conventions)
+
+## Linter Warnings Explained:
+[Our linter warnings are explained in this document](LINTER-WARNING.md)

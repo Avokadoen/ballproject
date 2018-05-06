@@ -23,6 +23,8 @@
 
 ### [Known-Bugs List](KNOWN-BUGS.md)
 
+### [Linter Warnings Explanation](LINTER-WARNING.md)
+
 
 #### Want alpha access?
 Contact akselhj@stud.ntnu.no
