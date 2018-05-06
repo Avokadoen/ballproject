@@ -20,8 +20,8 @@ At the end of each day, we usually tried to wrap up what we had done, and what w
 a "To-Do"-list, and a "Known-Bugs"-list, to get some overview of things that we would have to work on.
 
 ## Design
-<img src="https://github.com/Avokadoen/ballproject/blob/master/assets%20project%20files/protoIcon_1_00013.png" height="320" width="320">
-<img src="https://github.com/Avokadoen/ballproject/blob/master/assets%20project%20files/31899992_2369250123089014_7105271333868535808_n.png" height="720" width="1280">
+<img src="https://github.com/Avokadoen/ballproject/blob/master/assets%20project%20files/protoIcon_1_00013.png" height="200" width="200">
+<img src="https://github.com/Avokadoen/ballproject/blob/master/assets%20project%20files/31899992_2369250123089014_7105271333868535808_n.png" height="600" width="900">
 
 ## Features Included
 
