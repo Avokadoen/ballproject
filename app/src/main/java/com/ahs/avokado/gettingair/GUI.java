@@ -1,6 +1,5 @@
 package com.ahs.avokado.gettingair;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -11,31 +10,25 @@ import android.graphics.RectF;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
-import android.util.Log;
+
 import android.view.MotionEvent;
 import android.view.View;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-
-import static android.content.Context.MODE_PRIVATE;
 
 // kanskje random/basert på score melding
 
-public class GUI {
-	int guiState; // Different states for the menu, that are also accessed in the GameView for input from the user
-	Bitmap deadMenu;
+class GUI {
+	private int guiState; // Different states for the menu, that are also accessed in the GameView for input from the user
+	private Bitmap deadMenu;
 
-	private int scores[];
+	private RectF retryRect;
+	private RectF menuRect;
 
-	RectF retryRect;
-	RectF menuRect;
-
-	private View.OnTouchListener handleTouch = new View.OnTouchListener() {
+	private final View.OnTouchListener handleTouch = new View.OnTouchListener() {
 
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
+			v.performClick();
 			if(guiState == -1){
 				int x = (int) event.getX();
 				int y = (int) event.getY();

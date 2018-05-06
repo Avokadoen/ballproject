@@ -5,14 +5,10 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.util.Log;
 
-import static android.content.ContentValues.TAG;
+class CharacterSprite {
 
-
-public class CharacterSprite {
-
-	private Bitmap originalOriginalImage;
+	private final Bitmap originalOriginalImage;
 	private Bitmap originalImage;
 	private Bitmap image;
 
@@ -20,21 +16,21 @@ public class CharacterSprite {
 	private float x, y;
 	private float velx, vely;
 	private float gravx, gravy;
-	private float fallvel;
-	private float maxSpeed;
-	private float ratio;
+	private final float fallvel;
+	private final float maxSpeed;
+	private final float ratio;
 	private float characterScale;
-	private float maxCharacterScale;
+	private final float maxCharacterScale;
 	private int score;
 
 	private int imgSizeX;
 	private int imgSizeY;
 
 	private boolean frameCollision;
-	private int screenWidth;
+	private final int screenWidth;
 
 
-	public CharacterSprite(Bitmap bmp, int size, int X, int Y) {
+	CharacterSprite(Bitmap bmp, int size, int X, int Y) {
 
 		screenWidth = size;
 		score = 0;
@@ -120,7 +116,7 @@ public class CharacterSprite {
 		}
 
 		// Rotating bitmap to match proper input from the user
-		float newAngle = 0;
+		float newAngle;
 		if(gravy <= 0.01  && gravy >= -0.01 ) {
 			if(gravx > 0) newAngle = -90;
 			else newAngle = 90;
@@ -197,7 +193,7 @@ public class CharacterSprite {
 		return target.intersect(self);
 	}
 
-	public void rotateBitmap (float newAngle, double deltaTime)
+	private void rotateBitmap (float newAngle, double deltaTime)
 	{
 		// makes sure balloon isn't stuck
 		x += x/9 * -1 * deltaTime;
@@ -208,7 +204,7 @@ public class CharacterSprite {
 		image = Bitmap.createBitmap(originalImage, 0, 0, originalImage.getWidth(), originalImage.getHeight(), matrix, false);
 	}
 
-	public void reset(int x, int y){
+	void reset(int x, int y){
 		prevx 			= x;
 		prevy 			= y;
 		this.x 			= x;
@@ -223,7 +219,7 @@ public class CharacterSprite {
 		originalImage = Bitmap.createScaledBitmap(originalOriginalImage, imgSizeY, imgSizeX, false);
 	}
 
-	public int getScore(){
+	int getScore(){
 		return score;
 	}
 }

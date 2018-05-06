@@ -1,10 +1,8 @@
 package com.ahs.avokado.gettingair;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
@@ -13,8 +11,8 @@ import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 
 public class Preferences extends AppCompatActivity {
 
-	SharedPreferences.Editor editor;
-	SharedPreferences sharedPref;
+	private SharedPreferences.Editor editor;
+	private SharedPreferences sharedPref;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -26,8 +24,7 @@ public class Preferences extends AppCompatActivity {
 
 		Switch shareScore = findViewById(R.id.pr_noShare_sw);
 
-		boolean defaultValue = false;
-		boolean dontShare = sharedPref.getBoolean(getResources().getString(R.string.shareGlobalState), defaultValue);
+		boolean dontShare = sharedPref.getBoolean(getResources().getString(R.string.shareGlobalState), false);
 		shareScore.setChecked(dontShare);
 
 		// Stop sharing with google

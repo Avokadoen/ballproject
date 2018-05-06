@@ -36,7 +36,7 @@ import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
 	// our game thread that handles all of the app logic
-	private GameMainThread thread;
+	private final GameMainThread thread;
 
 	// for holding ball bitmap and physics related data
 	private CharacterSprite characterSprite;
@@ -46,15 +46,15 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 	private HittableController hittableController;
 
 	// deals with all in-game gui
-	public GUI gui;
-	public Rect windowFrame;
+	private GUI gui;
+	private Rect windowFrame;
 
 
 	// variable to talk to hardware for feedback
 	private final MediaPlayer plinger;
-	private Vibrator vibrator;
+	private final Vibrator vibrator;
 	private float effectInterval;
-	public static boolean startEffects;
+	private static boolean startEffects;
 
 	private PowerManager.WakeLock wakeLock;
 
@@ -87,9 +87,15 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 	public void surfaceCreated(SurfaceHolder holder) {
 
 		PowerManager powerManager = (PowerManager) getContext().getApplicationContext().getSystemService(POWER_SERVICE);
-		wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-				"MyWakelockTag");
-		wakeLock.acquire();
+		try{
+			wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+					"MyWakelockTag");
+		}
+		catch (NullPointerException e){
+			Log.d("debug", "surfaceCreated: " + e.getMessage());
+		}
+		long timeOut = 600000; // lock cpu for 10 min unless surface destroyed
+		wakeLock.acquire(timeOut);
 
 		// get screen properties
 		Rect frame = holder.getSurfaceFrame();
@@ -126,7 +132,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 				thread.setRunning(running);
 				thread.join();
 			} catch (InterruptedException e) {
-				Log.d("debug", "surfaceDestroyed: ");
 				e.printStackTrace();
 			}
 			retry = false;
@@ -145,8 +150,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 			}
 			else if(playerState == -1){
 				SharedPreferences sharedPref = getDefaultSharedPreferences(getContext().getApplicationContext());
-				boolean defaultValue = false;
-				boolean dontShare = sharedPref.getBoolean(getResources().getString(R.string.shareGlobalState), defaultValue);
+
+				boolean dontShare = sharedPref.getBoolean(getResources().getString(R.string.shareGlobalState), false);
 				if(!dontShare){
 					GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getContext());
 					if(account != null){
@@ -173,10 +178,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 					int index = 0;
 					while ((line = reader.readLine()) != null){
 						scores.add(index, line);
-						Log.d("debug", "line: " + line);
 						index++;
 					}
-
 					boardsFileContent.close();
 					reader.close();
 				}
@@ -281,7 +284,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 		characterSprite.updateGravity(x, y);
 	}
 
-	public void reset(int x, int y){
+	private void reset(int x, int y){
 		hittableController.reset();
 		characterSprite.reset(x, y);
 		playerState = 0;
