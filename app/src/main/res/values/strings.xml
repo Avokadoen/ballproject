@@ -4,5 +4,8 @@
     <string name="localBoard">Local Leaderboard</string>
     <string name="globalBoard">Global Leaderboard</string>
     <string name="menuPref">Preferences</string>
-    <string name="BackOption">Back</string>
+    <string name="exit">"Exit"</string>
+    <string name="backOption">Back</string>
+    <string name="prefTitle">Preferences</string>
+    <string name="optNoShare">"Don't share score"</string>
 </resources>

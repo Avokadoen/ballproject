@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    // GOOGLE
     <string name="app_id">37471069697</string>
     <string name="score_leader_id">CgkIgczMy4sBEAIQAA</string>
 
+    // FILE
+    <string name="shareGlobalState">com.ahs.avokado.gettingair.userPreferences.shareGlob</string>
 </resources>

@@ -87,4 +87,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mm_glolead_bt"
         app:layout_constraintVertical_bias="0.055" />
+
+    <Button
+        android:id="@+id/mm_exit_bt"
+        android:layout_width="211dp"
+        android:layout_height="51dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/exit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mm_pref_bt"
+        app:layout_constraintVertical_bias="0.131" />
 </android.support.constraint.ConstraintLayout>
