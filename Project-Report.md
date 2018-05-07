@@ -19,6 +19,9 @@ Then during development we would have internal discussions about how we would im
 At the end of each day, we usually tried to wrap up what we had done, and what we would start working on the next day. We would keep and maintain
 a "To-Do"-list, and a "Known-Bugs"-list, to get some overview of things that we would have to work on.
 
+## Testing
+As we were developing a game, we have done internal practical testing, and on several devices. Where we have actively tried to find flaws in our own app, and then written down the flaws we've found that we have to work on and fix. We've also had a group of friends be invited as alpha testers on Google Play, and their feedback has been good for us.
+
 ## Design
 <img src="https://github.com/Avokadoen/ballproject/blob/master/assets%20project%20files/protoIcon_1_00013.png" height="200" width="200">
 <img src="https://github.com/Avokadoen/ballproject/blob/master/assets%20project%20files/31899992_2369250123089014_7105271333868535808_n.png" height="300" width="540">
