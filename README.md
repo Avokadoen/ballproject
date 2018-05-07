@@ -1,4 +1,4 @@
-## Warning: as of 7.may we have noticed that the google play integration is bugged on SDK 25 and under
+#### Warning: as of 7th may we have noticed that the google play integration has some issues on SDK 25 and below.
 
 # Mobile Project "Getting Air" (Ball(oon) Game)
 
