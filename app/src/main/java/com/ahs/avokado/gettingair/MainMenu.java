@@ -43,7 +43,7 @@ public class MainMenu extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main_menu);
 
-		signedInAccount = null;
+		//signedInAccount = null;
 
 		GoogleSignInOptions gso = new GoogleSignInOptions.
 				Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN).build();
@@ -51,7 +51,10 @@ public class MainMenu extends AppCompatActivity {
 		// Build a GoogleSignInClient with the options specified by gso.
   		client = GoogleSignIn.getClient(this, gso);
 
-		signIn();
+  		if(!isSignedIn()){
+			signIn();
+		}
+
 
 		// Play option - starts the game
 		findViewById(R.id.mm_play_bt).setOnClickListener(new View.OnClickListener() {
@@ -127,13 +130,15 @@ public class MainMenu extends AppCompatActivity {
 	@Override
 	protected  void onStart(){
 		super.onStart();
-		//signInSilently();
+		if(GoogleSignIn.getLastSignedInAccount(this) != null){
+			signedInAccount = GoogleSignIn.getLastSignedInAccount(this);
+		}
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		signInSilently();
+		//signInSilently();
 	}
 
 	@Override
@@ -213,7 +218,7 @@ public class MainMenu extends AppCompatActivity {
 							// The signed in account is stored in the task's result.
 							signedInAccount = task.getResult();
 						} else {
-							signIn();
+							//signIn();
 						}
 					}
 				});
