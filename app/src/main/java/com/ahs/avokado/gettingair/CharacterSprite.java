@@ -6,12 +6,16 @@ import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.RectF;
 
+import static java.lang.Math.abs;
+
 class CharacterSprite {
 
 	private final Bitmap originalOriginalImage;
 	private Bitmap originalImage;
 	private Bitmap image;
 
+	private float rotationPos;
+	private float currentRotation, startAngle, endAngle;
 	private float prevX, prevY;
 	private float x, y;
 	private float velX, velY;
@@ -54,14 +58,17 @@ class CharacterSprite {
 		x = X;
 		y = Y;
 
-		velX = 0;
-		velY = 0;
-		gravityX = 0;
-		gravityY = 0;
-		fallVel = size * 0.6f;
-		maxSpeed = fallVel * 30f;
-		frameCollision = false;
-		image = originalImage;
+		currentRotation		= 0;
+		startAngle 			= 0;
+		endAngle 			= 0;
+		velX 				= 0;
+		velY 				= 0;
+		gravityX 			= 0;
+		gravityY 			= 0;
+		fallVel 			= size * 0.6f;
+		maxSpeed 			= fallVel * 30f;
+		frameCollision 		= false;
+		image 				= originalImage;
 
 	}
 
@@ -119,17 +126,28 @@ class CharacterSprite {
 
 		// Rotating bitmap to match proper input from the user
 		float newAngle;
-		if(gravityY <= 0.01  && gravityY >= -0.01 ) {
+		/*if(gravityY <= 0.01  && gravityY >= -0.01 ) {
 			if(gravityX > 0) newAngle = -90;
 			else newAngle = 90;
 
 		}
-		else{
+		else{*/
 			newAngle = (float)Math.toDegrees(Math.atan((gravityX * deltaTime)/(gravityY * deltaTime))) * -1;
 			if(gravityY < 0) newAngle += 180;
+	//	}
+		int degreeChange = (int)(180 * deltaTime);
+		if(currentRotation < newAngle){
+			if(newAngle - currentRotation > 180) currentRotation -= degreeChange;
+			else currentRotation += degreeChange;
 		}
-
-		rotateBitmap(newAngle, deltaTime);
+		else if(currentRotation > newAngle){
+			if(currentRotation - newAngle > 180) currentRotation += degreeChange;
+			else currentRotation -= degreeChange;
+		}
+		//currentRotation += degreeChange;
+		currentRotation %= 360;
+		if(abs(currentRotation - newAngle) < 10) currentRotation = newAngle;
+		rotateBitmap(currentRotation, deltaTime);
 
 		// move sprite
 		y += velY * deltaTime;
@@ -144,7 +162,7 @@ class CharacterSprite {
 	public void updateGravity(float x, float y){
 		// smooth out decrease of speed
 		// also an interpretation of users goal
-		if(Math.abs(x) < 0.2 && Math.abs(y) < 0.2){
+		if(abs(x) < 0.2 && abs(y) < 0.2){
 			x = 0;
 			y = 0;
 		}

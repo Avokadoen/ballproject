@@ -66,8 +66,8 @@ class Hittable {
 	public boolean move(double deltaTime){
 		lerpPos += deltaTime * speed;
 
-		currentX = (int)lerp(startX, endX, (float)lerpPos);
-		currentY = (int)lerp(startY, endY, (float)lerpPos);
+		currentX = (int)Globals.lerp(startX, endX, (float)lerpPos);
+		currentY = (int)Globals.lerp(startY, endY, (float)lerpPos);
 
 		return lerpPos >= 1 || currentX == endX && currentY == endY;
 	}
@@ -76,6 +76,6 @@ class Hittable {
 		return canvasDrawAngle;
 	}
 
-	float lerp(float v0, float v1, float t) {	return (1 - t) * v0 + t * v1;	}
+
 
 }

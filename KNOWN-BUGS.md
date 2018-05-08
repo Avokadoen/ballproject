@@ -20,6 +20,7 @@ level 3: Game breaking in nature. Will probably have the same origin as a level 
 - Description: App does not behave properly and/or crash when you close it and then open it
 - Possible solution:
 - Cause: On pause and resume does not deal with app state
+- State: If user close app, and then open again, app will start from main menu
 
 ##### Possible memory leak on play/menu transition
 - Description: Going from play to menu, the app over time slows down, slow on input, slow on loading, eventually goes into a total crash.

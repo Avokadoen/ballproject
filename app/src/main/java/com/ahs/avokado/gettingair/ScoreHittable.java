@@ -32,7 +32,7 @@ class ScoreHittable extends Hittable {
 	public boolean moveAndLerpColor(double deltaTime){
 		// lerp alpha on floating score text
 		lerpColorPos += deltaTime * speed;
-		imageAlpha = lerp(255, 0, lerpColorPos);
+		imageAlpha = Globals.lerp(255, 0, lerpColorPos);
 		return move(deltaTime);
 	}
 

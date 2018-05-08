@@ -31,7 +31,7 @@
 ###### Add exit button on Main Menu
 - Description: Exit button to exit the app from main menu
 - Possible solution:
-- State:
+- State: done.
 
 ## 1 TODO:
 

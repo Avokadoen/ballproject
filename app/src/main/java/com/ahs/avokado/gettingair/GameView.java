@@ -120,6 +120,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 		running = true;
 		thread.setRunning(running);
 		thread.start();
+
 	}
 
 	@Override
@@ -149,14 +150,26 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 				playerState = 0;
 			}
 			else if(playerState == -1){
+
 				SharedPreferences sharedPref = getDefaultSharedPreferences(getContext().getApplicationContext());
 
+				GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getContext());
 				boolean doShare = !(sharedPref.getBoolean(getResources().getString(R.string.shareGlobalState), false));
 				if(doShare){
-					GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getContext());
 					if(account != null){
 						Games.getLeaderboardsClient(getContext(), account)
 								.submitScore(getResources().getString(R.string.score_leader_id), characterSprite.getScore());
+					}
+				}
+				if(account != null) {
+					Games.getAchievementsClient(getContext(), account)
+							.unlock(getResources().getString(R.string.ach_pilot_flight));
+					Games.getAchievementsClient(getContext(), account)
+							.increment(getResources().getString(R.string.ach_playten), 1);
+
+					if(characterSprite.getScore() >= 50){
+						Games.getAchievementsClient(getContext(), account)
+								.unlock(getResources().getString(R.string.way_to_go_rookie));
 					}
 				}
 

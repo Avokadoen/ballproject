@@ -2,21 +2,23 @@ package com.ahs.avokado.gettingair;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentSender;
+
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.Status;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+
 import com.google.android.gms.games.Games;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -31,30 +33,18 @@ import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 
 public class MainMenu extends AppCompatActivity {
 
-	private GoogleSignInClient client;
 	private GoogleSignInAccount signedInAccount;
 
 	private static final int RC_SIGN_IN = 100;
-	private static final int RC_RESOLUTION = 4;
 	private static final int RC_LEADERBOARD_UI = 9004;
+	private static final int RC_ACHIEVEMENT_UI = 9003;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main_menu);
 
-		//signedInAccount = null;
-
-		GoogleSignInOptions gso = new GoogleSignInOptions.
-				Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN).build();
-
-		// Build a GoogleSignInClient with the options specified by gso.
-  		client = GoogleSignIn.getClient(this, gso);
-
-  		if(!isSignedIn()){
-			signIn();
-		}
-
+		signedInAccount = GoogleSignIn.getLastSignedInAccount(this);
 
 		// Play option - starts the game
 		findViewById(R.id.mm_play_bt).setOnClickListener(new View.OnClickListener() {
@@ -92,6 +82,8 @@ public class MainMenu extends AppCompatActivity {
 							Games.getLeaderboardsClient(getApplicationContext(), signedInAccount)
 									.submitScore(getResources().getString(R.string.score_leader_id), Integer.valueOf(line));
 
+
+
 						} catch (IOException e) {
 							Log.d("debug", "onClick: " + e.getMessage());
 						}
@@ -105,6 +97,7 @@ public class MainMenu extends AppCompatActivity {
 					Context context = getApplicationContext();
 					Toast toast = Toast.makeText(context, text, duration);
 					toast.show();
+					signIn();
 				}
 			}
 		});
@@ -115,6 +108,25 @@ public class MainMenu extends AppCompatActivity {
 			public void onClick(View view) {
 				Intent prefIntent = new Intent(MainMenu.this, Preferences.class);
 				startActivity(prefIntent);
+			}
+		});
+
+		// Preference Option - Brings up a local Preference up
+		findViewById(R.id.mm_achiev_bt).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				if(isSignedIn()){
+					showAchievements();
+				}
+				else{
+					CharSequence text = "you are not signed in";
+					int duration = Toast.LENGTH_LONG;
+
+					Context context = getApplicationContext();
+					Toast toast = Toast.makeText(context, text, duration);
+					toast.show();
+					signIn();
+				}
 			}
 		});
 
@@ -130,77 +142,66 @@ public class MainMenu extends AppCompatActivity {
 	@Override
 	protected  void onStart(){
 		super.onStart();
-		if(GoogleSignIn.getLastSignedInAccount(this) != null){
-			signedInAccount = GoogleSignIn.getLastSignedInAccount(this);
-		}
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		//signInSilently();
+		if(!isSignedIn()){
+			signInSilently();
+		}
 	}
 
 	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+	protected void onDestroy() {
+		super.onDestroy();
+		//signOut();
+	}
+
+	@Override
+	protected void onPause(){
+		super.onPause();
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-
-		// Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
 		if (requestCode == RC_SIGN_IN) {
-			// The Task returned from this call is always completed, no need to attach
-			// a listener.
-			Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-			handleSignInResult(task);
-		}
-		else if(requestCode == RC_RESOLUTION){
-			if(resultCode == RESULT_OK){
-				signIn();
-			}
-			else{
-				CharSequence text = "failed to retrieve google play account";
-				int duration = Toast.LENGTH_LONG;
-
-				Context context = getApplicationContext();
-				Toast toast = Toast.makeText(context, text, duration);
-				toast.show();
+			GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+			if (result.isSuccess()) {
+				// The signed in account is stored in the result.
+				signedInAccount = result.getSignInAccount();
+			} else {
+				String message = result.getStatus().getStatusMessage();
+				if (message == null || message.isEmpty()) {
+					message = getString(R.string.signInGenericError);
+				}
+				new AlertDialog.Builder(this).setMessage(message)
+						.setNeutralButton(android.R.string.ok, null).show();
 			}
 		}
 	}
 
 	private void signIn() {
-		Intent signInIntent = client.getSignInIntent();
-		startActivityForResult(signInIntent, RC_SIGN_IN);
+		GoogleSignInClient signInClient = GoogleSignIn.getClient(this,
+				GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN);
+		Intent intent = signInClient.getSignInIntent();
+		startActivityForResult(intent, RC_SIGN_IN);
 	}
 
 	private void showLeaderboard() {
-		Games.getLeaderboardsClient(this, signedInAccount)
-				.getLeaderboardIntent(getString(R.string.score_leader_id))
-				.addOnSuccessListener(new OnSuccessListener<Intent>() {
-					@Override
-					public void onSuccess(Intent intent) {
-						startActivityForResult(intent, RC_LEADERBOARD_UI);
-					}
-				});
-	}
+		if(isSignedIn()){
+			Games.getLeaderboardsClient(this,  signedInAccount)
+					.getLeaderboardIntent(getString(R.string.score_leader_id))
+					.addOnSuccessListener(new OnSuccessListener<Intent>() {
+						@Override
+						public void onSuccess(Intent intent) {
+							startActivityForResult(intent, RC_LEADERBOARD_UI);
+						}
+					});
 
-	private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
-		try {
-			signedInAccount = completedTask.getResult(ApiException.class);
-
-		} catch (ApiException e) {
-			// The ApiException status code indicates the detailed failure reason.
-			// Please refer to the GoogleSignInStatusCodes class reference for more information.
-			Log.w("debug", "signInResult:failed code=" + e.getStatusCode());
-			Status status = new Status(e.getStatusCode());
-			if(status.hasResolution()){
-				try{
-					status.startResolutionForResult(this, RC_RESOLUTION);
-				}
-				catch (IntentSender.SendIntentException ie){
-					Log.d("debug", "handleSignInResult: " + ie.getMessage());
-				}
-			}
 		}
+
 	}
 
 	private boolean isSignedIn() {
@@ -208,18 +209,45 @@ public class MainMenu extends AppCompatActivity {
 	}
 
 	private void signInSilently() {
-		GoogleSignInClient signInClient = GoogleSignIn.getClient(this,
-				GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN);
-		signInClient.silentSignIn().addOnCompleteListener(this,
-				new OnCompleteListener<GoogleSignInAccount>() {
-					@Override
-					public void onComplete(@NonNull Task<GoogleSignInAccount> task) {
-						if (task.isSuccessful()) {
-							// The signed in account is stored in the task's result.
-							signedInAccount = task.getResult();
-						} else {
-							//signIn();
+		if(!isSignedIn()){
+			GoogleSignInClient signInClient = GoogleSignIn.getClient(this,
+					GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN);
+			signInClient.silentSignIn().addOnCompleteListener(this,
+					new OnCompleteListener<GoogleSignInAccount>() {
+						@Override
+						public void onComplete(@NonNull Task<GoogleSignInAccount> task) {
+							if (task.isSuccessful()) {
+								// The signed in account is stored in the task's result.
+								signedInAccount = task.getResult();
+							} else {
+								// Player will need to sign-in explicitly using via UI
+								signIn();
+							}
 						}
+					});
+		}
+	}
+
+	private void signOut() {
+		final GoogleSignInClient signInClient = GoogleSignIn.getClient(this,
+				GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN);
+		signInClient.signOut().addOnCompleteListener(this,
+				new OnCompleteListener<Void>() {
+					@Override
+					public void onComplete(@NonNull Task<Void> task) {
+						// at this point, the user is signed out.
+						signedInAccount = null;
+					}
+				});
+	}
+
+	private void showAchievements() {
+		Games.getAchievementsClient(this, signedInAccount)
+				.getAchievementsIntent()
+				.addOnSuccessListener(new OnSuccessListener<Intent>() {
+					@Override
+					public void onSuccess(Intent intent) {
+						startActivityForResult(intent, RC_ACHIEVEMENT_UI);
 					}
 				});
 	}

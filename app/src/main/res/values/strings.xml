@@ -4,8 +4,10 @@
     <string name="localBoard">Local Leaderboard</string>
     <string name="globalBoard">Global Leaderboard</string>
     <string name="menuPref">Preferences</string>
+    <string name="achievments">Achievements(test)</string>
     <string name="exit">"Exit"</string>
     <string name="backOption">Back</string>
     <string name="prefTitle">Preferences</string>
     <string name="optNoShare">"Don't share score"</string>
+    <string name="signInGenericError">failed sign in</string>
 </resources>
