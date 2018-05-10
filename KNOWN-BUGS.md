@@ -63,8 +63,8 @@ level 3: Game breaking in nature. Will probably have the same origin as a level 
 - Possible solution:
 - Cause: We do our last draw on the loop before checking if you died
 
-##### Spazzing
+##### Spazzing/Jittering balloon
 - Description: Balloon spaz when user are doing slow movement
-- Possible solution: Lerp the newAngle for rotation
+- Possible solution: Lerp the newAngle for rotation // Include Z-axis gravity for noise-cancellation?
 - Cause: accelerometer give a low magnitude vector and therefore you can change rotation
        too fast.
