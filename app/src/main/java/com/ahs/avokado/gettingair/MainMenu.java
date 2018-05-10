@@ -91,7 +91,7 @@ public class MainMenu extends AppCompatActivity {
 					showLeaderboard();
 				}
 				else{
-					CharSequence text = "you are not signed in";
+					CharSequence text = "You are not signed in";
 					int duration = Toast.LENGTH_LONG;
 
 					Context context = getApplicationContext();
@@ -119,7 +119,7 @@ public class MainMenu extends AppCompatActivity {
 					showAchievements();
 				}
 				else{
-					CharSequence text = "you are not signed in";
+					CharSequence text = "You are not signed in";
 					int duration = Toast.LENGTH_LONG;
 
 					Context context = getApplicationContext();
@@ -142,14 +142,14 @@ public class MainMenu extends AppCompatActivity {
 	@Override
 	protected  void onStart(){
 		super.onStart();
+		if(!isSignedIn()){
+			signInSilently();
+		}
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if(!isSignedIn()){
-			signInSilently();
-		}
 	}
 
 	@Override
@@ -190,7 +190,6 @@ public class MainMenu extends AppCompatActivity {
 	}
 
 	private void showLeaderboard() {
-		if(isSignedIn()){
 			Games.getLeaderboardsClient(this,  signedInAccount)
 					.getLeaderboardIntent(getString(R.string.score_leader_id))
 					.addOnSuccessListener(new OnSuccessListener<Intent>() {
@@ -199,8 +198,6 @@ public class MainMenu extends AppCompatActivity {
 							startActivityForResult(intent, RC_LEADERBOARD_UI);
 						}
 					});
-
-		}
 
 	}
 

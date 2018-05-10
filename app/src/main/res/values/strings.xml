@@ -9,5 +9,5 @@
     <string name="backOption">Back</string>
     <string name="prefTitle">Preferences</string>
     <string name="optNoShare">"Don't share score"</string>
-    <string name="signInGenericError">failed sign in</string>
+    <string name="signInGenericError">Failed Google Play sign-in</string>
 </resources>

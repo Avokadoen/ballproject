@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.util.Log;
 
 import static java.lang.Math.abs;
 
@@ -20,6 +21,7 @@ class CharacterSprite {
 	private float x, y;
 	private float velX, velY;
 	private float gravityX, gravityY;
+	private float prevXGravity, prevYGravity;
 	private final float fallVel;
 	private final float maxSpeed;
 	private final float ratio;
@@ -65,6 +67,8 @@ class CharacterSprite {
 		velY 				= 0;
 		gravityX 			= 0;
 		gravityY 			= 0;
+		prevXGravity		= 0;
+		prevYGravity		= 0;
 		fallVel 			= size * 0.6f;
 		maxSpeed 			= fallVel * 30f;
 		frameCollision 		= false;
@@ -126,28 +130,40 @@ class CharacterSprite {
 
 		// Rotating bitmap to match proper input from the user
 		float newAngle;
-		/*if(gravityY <= 0.01  && gravityY >= -0.01 ) {
-			if(gravityX > 0) newAngle = -90;
-			else newAngle = 90;
 
-		}
-		else{*/
-			newAngle = (float)Math.toDegrees(Math.atan((gravityX * deltaTime)/(gravityY * deltaTime))) * -1;
-			if(gravityY < 0) newAngle += 180;
-	//	}
-		int degreeChange = (int)(180 * deltaTime);
-		if(currentRotation < newAngle){
-			if(newAngle - currentRotation > 180) currentRotation -= degreeChange;
-			else currentRotation += degreeChange;
-		}
-		else if(currentRotation > newAngle){
-			if(currentRotation - newAngle > 180) currentRotation += degreeChange;
-			else currentRotation -= degreeChange;
-		}
-		//currentRotation += degreeChange;
-		currentRotation %= 360;
-		if(abs(currentRotation - newAngle) < 10) currentRotation = newAngle;
+		float checkXNoise = abs(prevXGravity - gravityX);
+		float checkYNoise = abs(prevYGravity - gravityY);
+
+		if(checkXNoise > 0.1 && checkYNoise > 0.1) newAngle = (float)Math.toDegrees(Math.atan2(gravityX, gravityY)) * -1;
+		else newAngle = currentRotation;
+
+		currentRotation = newAngle;
 		rotateBitmap(currentRotation, deltaTime);
+
+		prevXGravity = gravityX;
+		prevYGravity = gravityY;
+		/*
+		if(gravityX <= 0.03 && gravityX >= -0.03) newAngle = currentRotation;
+		else newAngle = (float)Math.toDegrees(Math.atan2(gravityX, gravityY)) * -1;
+
+		float lastRotation = currentRotation;
+
+		int degreeChange = easyCalculateDegreeChange(currentRotation, newAngle);
+
+		if(gravityX <= 0.08 && gravityX >= -0.08 && gravityY <= 0.08 && gravityY >= -0.08) currentRotation = lastRotation;
+		else{
+			if(abs(degreeChange) < 15) currentRotation = lastRotation;
+			else if(degreeChange >= 15) currentRotation += 5;
+			else if(degreeChange <= -15) currentRotation -= 5;
+		}
+		*/
+
+		//if(currentRotation > 180) currentRotation = currentRotation - 360;
+		//else if(currentRotation < -180) currentRotation = currentRotation + 360;
+
+		//currentRotation = newAngle;
+		//rotateBitmap(currentRotation, deltaTime);
+
 
 		// move sprite
 		y += velY * deltaTime;
@@ -162,10 +178,10 @@ class CharacterSprite {
 	public void updateGravity(float x, float y){
 		// smooth out decrease of speed
 		// also an interpretation of users goal
-		if(abs(x) < 0.2 && abs(y) < 0.2){
+		/*if(abs(x) < 0.2 && abs(y) < 0.2){
 			x = 0;
 			y = 0;
-		}
+		}*/
 		// feed accelerometer data to sprite
 		gravityX = x;
 		gravityY = y;
@@ -241,5 +257,90 @@ class CharacterSprite {
 
 	int getScore(){
 		return score;
+	}
+
+	private int calculateDegreeChange(float currentRotation, float newAngle){
+		int degreeChange = 0;
+		if(currentRotation >= -90 && currentRotation <= 0){
+			if(newAngle <= 90 && newAngle >= 0){
+				degreeChange = (int)(abs(currentRotation) + newAngle);
+			}
+			else if(newAngle <= 180 && newAngle >= 90){
+				degreeChange = (int)(abs(currentRotation + newAngle));
+			}
+			else if(newAngle >= -90 && newAngle <= 0){
+				if(currentRotation >= newAngle) degreeChange = (int)(abs(currentRotation) - newAngle);
+				else degreeChange = (int)(newAngle + abs(currentRotation));
+				degreeChange = (int)(currentRotation - newAngle);
+			}
+			else{
+				degreeChange = (int)(abs(currentRotation) - newAngle);
+			}
+		}
+		else if(currentRotation >= -180 && currentRotation <= -90){
+			if(newAngle >= 180 && newAngle <= 90){
+				if(currentRotation >= newAngle) degreeChange = (int)(currentRotation - newAngle);
+				else degreeChange = (int)(newAngle - currentRotation);
+			}
+			else{
+				degreeChange = (int)(currentRotation - newAngle);
+			}
+		}
+		else if(currentRotation >= 90 && currentRotation <= 180){
+			if(newAngle >= 0 && newAngle <= 270){
+				if(currentRotation >= newAngle) degreeChange = (int)(currentRotation - newAngle);
+				else degreeChange = (int)(newAngle - currentRotation);
+			}
+			else{
+				degreeChange = (int)(newAngle - currentRotation);
+			}
+		}
+		else {
+			if(newAngle <= 90){
+				if(currentRotation >= newAngle) degreeChange = (int)(currentRotation - newAngle);
+				else degreeChange = (int)(newAngle - currentRotation);
+			}
+			else if(newAngle <= 180){
+				degreeChange = (int)(newAngle - currentRotation);
+			}
+			else if(newAngle <= 270){
+				degreeChange = (int)(newAngle - currentRotation);
+			}
+			else{
+				degreeChange = (int)(newAngle - 360 - currentRotation);
+			}
+		}
+		// degreeChange = (int)(360 - currentRotation + newAngle);
+		return degreeChange;
+	}
+
+	private int easyCalculateDegreeChange(float currentRotation, float newAngle){
+
+		//if(currentRotation > 180) currentRotation = currentRotation - 360;
+		//else if(currentRotation < -180) currentRotation = currentRotation + 360;
+
+
+		int degreeChange = 0;
+		if(currentRotation == newAngle){
+			degreeChange = 0;
+		}
+		else if(currentRotation > newAngle){
+			if(currentRotation <= 0) 						degreeChange = (int)(abs(currentRotation) - abs(newAngle));
+			else if(currentRotation > 0 && newAngle > 0) 	degreeChange = (int)(currentRotation - newAngle);
+			else if(currentRotation > 0 && newAngle < 0) 	degreeChange = (int)-(currentRotation + abs(newAngle));
+			else if(currentRotation > 0 && newAngle == 0)	degreeChange = (int)-(currentRotation);
+		}
+		else if(currentRotation < newAngle){
+			if(newAngle <= 0) 								degreeChange = (int)(abs(currentRotation) - abs(newAngle));
+			else if(newAngle > 0 && currentRotation > 0) 	degreeChange = (int)(newAngle - currentRotation);
+			else if(newAngle > 0 && currentRotation < 0) 	degreeChange = (int)(newAngle + abs(currentRotation));
+			else if(newAngle > 0 && currentRotation == 0) 	degreeChange = (int)(newAngle);
+		}
+		if(degreeChange > 180) degreeChange = degreeChange - 360;
+		else if(degreeChange < -180) degreeChange = degreeChange + 360;
+
+
+		if(abs(degreeChange) > 45) Log.d("debug", "newAngle is: " + newAngle + "currentRotation is: " + currentRotation + "degreeChange is: " + degreeChange);
+		return degreeChange;
 	}
 }
