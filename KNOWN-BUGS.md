@@ -27,6 +27,10 @@ level 3: Game breaking in nature. Will probably have the same origin as a level 
 - Possible solution:
 - Cause: Guess: Memory leak, possibly from bitmaps of some sort. Dead menu or game bitmaps?
 
+##### Not able to login on release apk
+- Description: Debug apk lets you login to Google Play Services, but release apk does not
+- Possible solution: Add an extra Linked App with the proper release signed certificate
+- Cause: Probably that the oauth2 client id doesn't match the release apk certificate.
 
 ## LEVEL 2:
 
@@ -65,6 +69,6 @@ level 3: Game breaking in nature. Will probably have the same origin as a level 
 
 ##### Spazzing/Jittering balloon
 - Description: Balloon spaz when user are doing slow movement
-- Possible solution: Lerp the newAngle for rotation // Include Z-axis gravity for noise-cancellation?
+- Possible solution: Lerp the newAngle for rotation // Include Z-axis gravity for noise-cancellation? // Use of GYROSCOPE sensor or GAME_ROTATION_VECTOR?
 - Cause: accelerometer give a low magnitude vector and therefore you can change rotation
        too fast.
