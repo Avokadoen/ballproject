@@ -41,7 +41,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 		mSensorManager = (SensorManager) this.getSystemService(SENSOR_SERVICE);
 		try {
 			assert mSensorManager != null;
-			mGravity = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+			mGravity = mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);	//TYPE_ACCELERATION TYPE_GRAVITY	TYPE_GYROSCOPE	TYPE_GAME_ROTATION_VECTOR
 		} catch (NullPointerException ne) {
 			Log.d("SensorActivity()", "SensorActivity: null pointer exception");
 			System.exit(-1);
@@ -79,7 +79,7 @@ public class GameActivity extends AppCompatActivity implements SensorEventListen
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 		// if player gives input
-		if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+		if (event.sensor.getType() == Sensor.TYPE_GRAVITY) { //TYPE_ACCELERATION	TYPE_GRAVITY	TYPE_GYROSCOPE	TYPE_GAME_ROTATION_VECTOR
 			if(theGame.running) {
 				theGame.updateGravity(event.values[1], event.values[0]);
 			}

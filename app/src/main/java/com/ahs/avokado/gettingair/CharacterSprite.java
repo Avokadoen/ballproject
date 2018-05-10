@@ -134,8 +134,9 @@ class CharacterSprite {
 		float checkXNoise = abs(prevXGravity - gravityX);
 		float checkYNoise = abs(prevYGravity - gravityY);
 
-		if(checkXNoise > 0.1 && checkYNoise > 0.1) newAngle = (float)Math.toDegrees(Math.atan2(gravityX, gravityY)) * -1;
-		else newAngle = currentRotation;
+		//if(checkXNoise > 0.1 && checkYNoise > 0.1)
+		newAngle = (float)Math.toDegrees(Math.atan2(gravityX, gravityY)) * -1;
+		//else newAngle = currentRotation;
 
 		currentRotation = newAngle;
 		rotateBitmap(currentRotation, deltaTime);

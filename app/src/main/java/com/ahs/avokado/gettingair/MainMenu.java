@@ -68,6 +68,7 @@ public class MainMenu extends AppCompatActivity {
 		findViewById(R.id.mm_gloLead_bt).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
+				showLeaderboard();
 				if(isSignedIn()){
 					SharedPreferences sharedPref = getDefaultSharedPreferences(getApplicationContext());
 
@@ -190,15 +191,14 @@ public class MainMenu extends AppCompatActivity {
 	}
 
 	private void showLeaderboard() {
-			Games.getLeaderboardsClient(this,  signedInAccount)
-					.getLeaderboardIntent(getString(R.string.score_leader_id))
-					.addOnSuccessListener(new OnSuccessListener<Intent>() {
-						@Override
-						public void onSuccess(Intent intent) {
-							startActivityForResult(intent, RC_LEADERBOARD_UI);
-						}
-					});
-
+		Games.getLeaderboardsClient(this,  signedInAccount)
+				.getLeaderboardIntent(getString(R.string.score_leader_id))
+				.addOnSuccessListener(new OnSuccessListener<Intent>() {
+					@Override
+					public void onSuccess(Intent intent) {
+						startActivityForResult(intent, RC_LEADERBOARD_UI);
+					}
+				});
 	}
 
 	private boolean isSignedIn() {
