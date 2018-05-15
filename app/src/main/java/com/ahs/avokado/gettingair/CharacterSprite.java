@@ -28,7 +28,7 @@ class CharacterSprite {
 	private final float maxSpeed;
 	private final float ratio;
 	private final float maxCharacterScale;
-	private static float startScale = 0.10f; // 0.02f
+	private static float startScale = 0.02f;
 	private int score;
 
 	private int imgSizeX;
