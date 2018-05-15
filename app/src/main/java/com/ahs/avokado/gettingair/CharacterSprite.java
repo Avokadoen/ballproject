@@ -3,6 +3,7 @@ package com.ahs.avokado.gettingair;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.Log;
@@ -22,11 +23,12 @@ class CharacterSprite {
 	private float velX, velY;
 	private float gravityX, gravityY;
 	private float prevXGravity, prevYGravity;
+	private float characterScale;
 	private final float fallVel;
 	private final float maxSpeed;
 	private final float ratio;
-	private float characterScale;
 	private final float maxCharacterScale;
+	private static float startScale = 0.10f; // 0.02f
 	private int score;
 
 	private int imgSizeX;
@@ -44,7 +46,7 @@ class CharacterSprite {
 		float height = bmp.getHeight();
 		ratio = ( width / height);
 		maxCharacterScale = 0.02f * 10;
-		characterScale = 0.02f;
+		characterScale = startScale;
 		originalOriginalImage = bmp;
 		originalOriginalImage.setDensity(originalOriginalImage.getDensity()/2);
 
@@ -217,17 +219,73 @@ class CharacterSprite {
 		return target.contains(self);
 	}
 
+	// rtr true if param contains sprite, false otherwise
 	public boolean checkContact(RectF target){
 
 		RectF self = new RectF(0,0, image.getWidth(), image.getHeight());
 
 		Matrix transform = new Matrix();
 		transform.setScale(0.9f,0.9f);
-		transform.postTranslate(x, y);
+		transform.setRotate(currentRotation);
+		transform.setTranslate(x, y);
+
 		transform.mapRect(self);
 
-		// rtr true if param contains sprite, false otherwise
+
+		//if(target.intersect(self)){
+		//	return verifyContact(target);
+		//}
 		return target.intersect(self);
+	}
+
+	public boolean verifyContact(RectF target){
+
+		int imgW = image.getWidth();
+		int imgH = image.getHeight();
+
+		RectF self 			= new RectF(0,0, image.getWidth(), image.getHeight());
+		RectF selfMiddle 	= new RectF();
+		RectF selfRight 	= new RectF();
+		RectF selfLeft 		= new RectF();
+		RectF selfBottom 	= new RectF();
+
+
+		Matrix coreTransform = new Matrix();
+		coreTransform.setScale(0.5f,0.8f);
+		coreTransform.setRotate(currentRotation);
+		coreTransform.setTranslate(x, y);
+		coreTransform.mapRect(selfMiddle, self);
+		if(target.intersect(selfMiddle)){
+			return true;
+		}
+
+		Matrix leftSideTransform = new Matrix();
+		leftSideTransform.setScale(0.2f,0.4f);
+		leftSideTransform.setRotate(currentRotation);
+		leftSideTransform.setTranslate(x - imgW * 0.45f, y + imgH * 0.3f);
+		leftSideTransform.mapRect(selfRight, self);
+		if(target.intersect(selfRight)){
+			return true;
+		}
+
+		Matrix rightSideTransform = new Matrix();
+		rightSideTransform.setScale(0.2f,0.4f);
+		rightSideTransform.setRotate(currentRotation);
+		rightSideTransform.setTranslate(x - imgW * 0.45f, y + imgH * 0.3f);
+		rightSideTransform.mapRect(selfLeft, self);
+		if(target.intersect(selfLeft)){
+			return true;
+		}
+
+		Matrix bottomTransform = new Matrix();
+		bottomTransform.setScale(0.2f,0.1f);
+		bottomTransform.setRotate(currentRotation);
+		bottomTransform.setTranslate(x, y - imgH * 0.347f);
+		bottomTransform.mapRect(selfBottom, self);
+		if(target.intersect(selfBottom)){
+			return true;
+		}
+		return false;
 	}
 
 	private void rotateBitmap (float newAngle, double deltaTime)
@@ -248,8 +306,8 @@ class CharacterSprite {
 		this.y 			= y;
 		velX 			= 0;
 		velY 			= 0;
-		characterScale 	= 0.02f;
 		score 			= 0;
+		characterScale 	= startScale;
 
 		imgSizeX = (int)(screenWidth * characterScale);
 		imgSizeY = (int)((screenWidth * characterScale) * ratio);

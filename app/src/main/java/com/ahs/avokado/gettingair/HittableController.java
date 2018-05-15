@@ -90,10 +90,8 @@ class HittableController {
 			spikes.add(newOxygen);															// Adding object to the ConcurrentLinkedQueue
 			spikesSpawnIntervalCounter.addAndGet(-spikesSpawnIntervalCounter.intValue());	// Decrease IntervalCounter to maintain the spawn-rate
 		}
-		int index = -1;
 		int status = 0;
 		for (Hittable obj : oxygen) {
-			index++;
 			if (obj != null) {
 				if(obj.move(deltaTime)){	// Moves the object, and checks if it's lerp-movement is done
 					oxygen.remove(obj);					// Remove the object if it's movement is done (off-screen)
@@ -119,9 +117,7 @@ class HittableController {
 				}
 			}
 		}
-		index = -1;
 		for (Hittable obj : spikes) {
-			index++;
 			if (obj != null) {
 				if(obj.move(deltaTime)){	// Moves the object, and checks if it's lerp-movement is done
 					spikes.remove(obj);					// Remove the object if it's movement is done (off-screen)
@@ -143,9 +139,7 @@ class HittableController {
 				}
 			}
 		}
-		index = -1;
 		for (ScoreHittable obj : scores) {			// Updating the displaying scores to the player
-			index++;
 			if (obj != null) {
 				if (obj.moveAndLerpColor(deltaTime)) {
 					scores.remove(obj);

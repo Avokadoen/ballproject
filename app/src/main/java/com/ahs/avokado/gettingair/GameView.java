@@ -30,7 +30,6 @@ import static android.content.Context.POWER_SERVICE;
 import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 
 // todo: cosmetic: balloon pop frame on death
-// todo: reset functions for retry option
 // class for creating frames
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
@@ -40,6 +39,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 	// for holding ball bitmap and physics related data
 	private CharacterSprite characterSprite;
 	private int playerState;
+	private boolean drawnDeathFrame;
 
 	// for holding ball bitmap and physics related data
 	private HittableController hittableController;
@@ -62,7 +62,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
 	public GameView(final Context context) {
 		super(context);
-		playerState = 0;
+
+		// Player related variables
+		playerState 	= 0;
+		drawnDeathFrame = false;
+
 		// prepare parameter for thread
 		getHolder().addCallback(this);
 		thread = new GameMainThread(getHolder(), this);
@@ -90,7 +94,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 			wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
 					"MyWakelockTag");
 
-			long timeOut = 600000; // lock cpu for 10 min unless surface destroyed
+			// lock cpu for 10 min unless surface destroyed
+			long timeOut = 600000;
 			wakeLock.acquire(timeOut);
 		}
 		catch (NullPointerException e){
