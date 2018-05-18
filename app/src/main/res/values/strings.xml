@@ -1,5 +1,5 @@
 <resources>
-    <string name="appName">""</string>    <!-- Getting Air -->
+    <string name="appName">Getting Air</string>    <!-- Getting Air -->
     <string name="menuPlay">""</string>                   <!-- Play -->
     <string name="localBoard">""</string>    <!-- Local Leaderboard -->
     <string name="globalBoard">""</string>  <!-- Global Leaderboard -->
