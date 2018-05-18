@@ -68,7 +68,7 @@ public class MainMenu extends AppCompatActivity {
 		findViewById(R.id.mm_gloLead_bt).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				showLeaderboard();
+				//showLeaderboard();
 				if(isSignedIn()){
 					SharedPreferences sharedPref = getDefaultSharedPreferences(getApplicationContext());
 

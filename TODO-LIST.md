@@ -28,6 +28,10 @@
 - Possible solution: Possibly a "moving" skybox in-game?
 - State:
 
+###### Fix title/logo on main menu
+- Description: The current title/logo isn't optimal, something more appropriate should be done and added.
+- Possible solution: Create a default text/logo, or just a minor change to the current text
+
 ###### Add exit button on Main Menu
 - Description: Exit button to exit the app from main menu
 - Possible solution:

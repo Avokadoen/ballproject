@@ -6,8 +6,8 @@ android {
         applicationId "com.ahs.avokado.gettingair"
         minSdkVersion 23
         targetSdkVersion 27
-        versionCode 23270018
-        versionName "1.8"
+        versionCode 23270019
+        versionName "1.9"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

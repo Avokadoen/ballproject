@@ -34,6 +34,11 @@ level 3: Game breaking in nature. Will probably have the same origin as a level 
 
 ## LEVEL 2:
 
+###### Main Menu landscape not working
+- Description: When viewing the main menu in landscape mode, there are issues with not all buttons being displayed
+- Possible solution: Fix XML? Change to a different UI? Or force that landscape isn't possible
+- Cause: 
+
 ##### Global Leaderboards not working properly
 - Description: Sometimes, certain units will not connect properly to the global Leaderboards
 - Possible solution: Change the way we do login to Google Play (/or do a different check when trying to load leaderboards)

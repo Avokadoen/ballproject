@@ -5,7 +5,7 @@
     <string name="score_leader_id">CgkIgczMy4sBEAIQAA</string>
     <string name="ach_pilot_flight">CgkIgczMy4sBEAIQBA</string>
     <string name="ach_playten">CgkIgczMy4sBEAIQBg</string>
-    <string name="way_to_go_rookie">CgkIgczMy4sBEAIQBQ</string>
+    <string name="ach_way_to_go_rookie">CgkIgczMy4sBEAIQBQ</string>
     // FILE
     <string name="shareGlobalState">com.ahs.avokado.gettingair.userPreferences.shareGlob</string>
 </resources>

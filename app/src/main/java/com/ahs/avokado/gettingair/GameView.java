@@ -174,7 +174,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
 					if(characterSprite.getScore() >= 50){
 						Games.getAchievementsClient(getContext(), account)
-								.unlock(getResources().getString(R.string.way_to_go_rookie));
+								.unlock(getResources().getString(R.string.ach_way_to_go_rookie));
 					}
 				}
 
