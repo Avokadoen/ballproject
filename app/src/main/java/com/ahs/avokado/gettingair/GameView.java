@@ -3,6 +3,7 @@ package com.ahs.avokado.gettingair;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -47,6 +48,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 	// deals with all in-game gui
 	private GUI gui;
 	private Rect windowFrame;
+
 
 
 	// variable to talk to hardware for feedback

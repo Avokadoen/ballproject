@@ -100,13 +100,15 @@ class HittableController {
 				// Retrieving and setting the proper rotation
 				matrix.setRotate(obj.getCanvasDrawAngle(), 0, 0);
 				matrix.postTranslate(obj.currentY, obj.currentX);
+
 				// Constructing hitbox
 				RectF hitbox = new RectF(0, 0,
 						oxygenImage.getWidth(), oxygenImage.getHeight());
 				matrix.mapRect(hitbox);
-				if(player.checkContact(hitbox)){		// Check for collision with player
-					oxygen.remove(obj);					// Remove object that collided with player
-					status += 1;						// Counting a status for "score", if the player would collide with more than one object in one frame
+
+				if(player.checkContact(hitbox, null)){	// Check for collision with player
+					oxygen.remove(obj);							// Remove object that collided with player
+					status += 1;								// Counting a status for "score"
 
 					// Creating a floating score text to display score to the player
 					ScoreHittable newScore = new ScoreHittable
@@ -133,7 +135,7 @@ class HittableController {
 						spikeImage.getWidth(), spikeImage.getHeight());
 				matrix.mapRect(hitbox);
 
-				if(player.checkContact(hitbox)){		// Check for collision with player
+				if(player.checkContact(hitbox, spikeImage)){		// Check for collision with player
 					//spikes.remove(obj);
 					return -1;							// Returns -1 as playerStatus (dead)
 				}

@@ -2,13 +2,19 @@ package com.ahs.avokado.gettingair;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import static java.lang.Math.abs;
+
+/*
+	Sources:
+	verifyCollision(): https://www.codeproject.com/Articles/524105/Per-pixel-collision-detection-on-Android-devices
+*/
 
 class CharacterSprite {
 
@@ -16,8 +22,7 @@ class CharacterSprite {
 	private Bitmap originalImage;
 	private Bitmap image;
 
-	private float rotationPos;
-	private float currentRotation, startAngle, endAngle;
+	private float currentRotation;
 	private float prevX, prevY;
 	private float x, y;
 	private float velX, velY;
@@ -28,7 +33,7 @@ class CharacterSprite {
 	private final float maxSpeed;
 	private final float ratio;
 	private final float maxCharacterScale;
-	private static float startScale = 0.02f;
+	private static float startScale = 0.05f;
 	private int score;
 
 	private int imgSizeX;
@@ -41,7 +46,7 @@ class CharacterSprite {
 	CharacterSprite(Bitmap bmp, int size, int X, int Y) {
 
 		screenWidth = size;
-		score = 0;
+
 		float width = bmp.getWidth();
 		float height = bmp.getHeight();
 		ratio = ( width / height);
@@ -54,23 +59,11 @@ class CharacterSprite {
 		imgSizeX = (int)(size * characterScale);
 		imgSizeY = (int)((size * characterScale) * ratio);
 		originalImage = Bitmap.createScaledBitmap(bmp, imgSizeY, imgSizeX, false);
-		Matrix matrix = new Matrix();
-		matrix.postRotate(0);
-		originalImage = Bitmap.createBitmap(originalImage, 0, 0, originalImage.getWidth(), originalImage.getHeight(), matrix, false);
 
 		// init pos and physics vars
 		x = X;
 		y = Y;
 
-		currentRotation		= 0;
-		startAngle 			= 0;
-		endAngle 			= 0;
-		velX 				= 0;
-		velY 				= 0;
-		gravityX 			= 0;
-		gravityY 			= 0;
-		prevXGravity		= 0;
-		prevYGravity		= 0;
 		fallVel 			= size * 0.6f;
 		maxSpeed 			= fallVel * 30f;
 		frameCollision 		= false;
@@ -220,7 +213,7 @@ class CharacterSprite {
 	}
 
 	// rtr true if param contains sprite, false otherwise
-	public boolean checkContact(RectF target){
+	public boolean checkContact(RectF targetHitbox, @Nullable Bitmap targetAsset){
 
 		RectF self = new RectF(0,0, image.getWidth(), image.getHeight());
 
@@ -231,59 +224,31 @@ class CharacterSprite {
 
 		transform.mapRect(self);
 
-
-		//if(target.intersect(self)){
-		//	return verifyContact(target);
-		//}
-		return target.intersect(self);
+		RectF overlap = new RectF();
+		if(overlap.setIntersect(targetHitbox, self)){
+			if(targetAsset != null){
+				return verifyContact(overlap, targetAsset);
+			} else return true;
+		}
+		return false;
 	}
 
-	public boolean verifyContact(RectF target){
+	public boolean verifyContact(RectF overlap, Bitmap targetAsset){
+		overlap.offset(-overlap.centerX(), -overlap.centerY());
 
-		int imgW = image.getWidth();
-		int imgH = image.getHeight();
+		for (int y = 0; y < overlap.height(); y++){
+			for (int x = 0; x < overlap.width(); x++){
+				try{
+					int charColor 	= originalImage.getPixel((int)overlap.left + x, (int)overlap.bottom + y);
+					int targetColor = targetAsset.getPixel((int)overlap.left + x, (int)overlap.bottom + y);
 
-		RectF self 			= new RectF(0,0, image.getWidth(), image.getHeight());
-		RectF selfMiddle 	= new RectF();
-		RectF selfRight 	= new RectF();
-		RectF selfLeft 		= new RectF();
-		RectF selfBottom 	= new RectF();
-
-
-		Matrix coreTransform = new Matrix();
-		coreTransform.setScale(0.5f,0.8f);
-		coreTransform.setRotate(currentRotation);
-		coreTransform.setTranslate(x, y);
-		coreTransform.mapRect(selfMiddle, self);
-		if(target.intersect(selfMiddle)){
-			return true;
-		}
-
-		Matrix leftSideTransform = new Matrix();
-		leftSideTransform.setScale(0.2f,0.4f);
-		leftSideTransform.setRotate(currentRotation);
-		leftSideTransform.setTranslate(x - imgW * 0.45f, y + imgH * 0.3f);
-		leftSideTransform.mapRect(selfRight, self);
-		if(target.intersect(selfRight)){
-			return true;
-		}
-
-		Matrix rightSideTransform = new Matrix();
-		rightSideTransform.setScale(0.2f,0.4f);
-		rightSideTransform.setRotate(currentRotation);
-		rightSideTransform.setTranslate(x - imgW * 0.45f, y + imgH * 0.3f);
-		rightSideTransform.mapRect(selfLeft, self);
-		if(target.intersect(selfLeft)){
-			return true;
-		}
-
-		Matrix bottomTransform = new Matrix();
-		bottomTransform.setScale(0.2f,0.1f);
-		bottomTransform.setRotate(currentRotation);
-		bottomTransform.setTranslate(x, y - imgH * 0.347f);
-		bottomTransform.mapRect(selfBottom, self);
-		if(target.intersect(selfBottom)){
-			return true;
+					if ((Color.alpha(charColor) > 100) && (Color.alpha(targetColor) > 100))
+						return true;  //there are non-transparent pixels which overlap
+				}
+				catch (IllegalArgumentException e) {
+					// nothing
+				}
+			}
 		}
 		return false;
 	}
