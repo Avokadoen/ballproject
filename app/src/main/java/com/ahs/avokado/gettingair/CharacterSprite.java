@@ -213,7 +213,7 @@ class CharacterSprite {
 	}
 
 	// rtr true if param contains sprite, false otherwise
-	public boolean checkContact(RectF targetHitbox, @Nullable Bitmap targetAsset){
+	public boolean checkContact(RectF targetHitbox, @Nullable Bitmap targetAsset, @Nullable Matrix targetMatrix){
 
 		RectF self = new RectF(0,0, image.getWidth(), image.getHeight());
 
@@ -226,26 +226,32 @@ class CharacterSprite {
 
 		RectF overlap = new RectF();
 		if(overlap.setIntersect(targetHitbox, self)){
-			if(targetAsset != null){
-				return verifyContact(overlap, targetAsset);
+			if(targetAsset != null && targetMatrix != null){
+				return verifyContact(overlap, targetAsset, targetMatrix, transform);
 			} else return true;
 		}
 		return false;
 	}
 
-	public boolean verifyContact(RectF overlap, Bitmap targetAsset){
+	public boolean verifyContact(RectF overlap, Bitmap targetAsset, Matrix targetTransform, Matrix selfTransform){
 		// offset twice to avoid floating point error (which cause illegal argument)
 		overlap.offset(-overlap.centerX(), -overlap.centerY());
 		overlap.offset(-overlap.centerX(), -overlap.centerY());
 
         overlap.offset(overlap.width()/2, overlap.height()/2);
 
+        RectF selfOverlap = new RectF(overlap);
+        selfTransform.mapRect(selfOverlap);
+
+        RectF targetOverlap = new RectF(overlap);
+        targetTransform.mapRect(targetOverlap);
+
 
 		for (int y = 0; y < overlap.height(); y++){
 			for (int x = 0; x < overlap.width(); x++){
 				try{
-					int charColor 	= originalImage.getPixel((int)overlap.left + x, (int)overlap.bottom + y);
-					int targetColor = targetAsset.getPixel((int)overlap.left + x, (int)overlap.bottom + y);
+					int charColor 	= originalImage.getPixel((int)selfOverlap.left + x, (int)selfOverlap.top + y);
+					int targetColor = targetAsset.getPixel((int)targetOverlap.left + x, (int)targetOverlap.top + y);
 
 					if ((Color.alpha(charColor) > 100) && (Color.alpha(targetColor) > 100))
 						return true;  //there are non-transparent pixels which overlap

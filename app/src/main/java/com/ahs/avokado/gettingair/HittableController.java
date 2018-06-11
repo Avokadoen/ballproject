@@ -106,7 +106,7 @@ class HittableController {
 						oxygenImage.getWidth(), oxygenImage.getHeight());
 				matrix.mapRect(hitbox);
 
-				if(player.checkContact(hitbox, null)){	// Check for collision with player
+				if(player.checkContact(hitbox, null, null)){	// Check for collision with player
 					oxygen.remove(obj);							// Remove object that collided with player
 					status += 1;								// Counting a status for "score"
 
@@ -135,7 +135,7 @@ class HittableController {
 						spikeImage.getWidth(), spikeImage.getHeight());
 				matrix.mapRect(hitbox);
 
-				if(player.checkContact(hitbox, spikeImage)){		// Check for collision with player
+				if(player.checkContact(hitbox, spikeImage, matrix)){		// Check for collision with player
 					//spikes.remove(obj);
 					return -1;							// Returns -1 as playerStatus (dead)
 				}
