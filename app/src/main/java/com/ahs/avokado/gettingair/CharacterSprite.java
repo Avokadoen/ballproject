@@ -249,17 +249,24 @@ class CharacterSprite {
 
 		for (int y = 0; y < overlap.height(); y++){
 			for (int x = 0; x < overlap.width(); x++){
-				try{
-					int charColor 	= originalImage.getPixel((int)selfOverlap.left + x, (int)selfOverlap.top + y);
+
+				// if we are within both images pixel range, check pixel values
+				if	(	selfOverlap.left + x < image.getWidth() && selfOverlap.top + y < image.getHeight() &&
+						(targetOverlap.left + x) < targetAsset.getWidth() && (targetOverlap.top + y) < targetAsset.getHeight())
+				{
+					int charColor 	= image.getPixel((int)selfOverlap.left + x, (int)selfOverlap.top + y);
 					int targetColor = targetAsset.getPixel((int)targetOverlap.left + x, (int)targetOverlap.top + y);
 
-					if ((Color.alpha(charColor) > 100) && (Color.alpha(targetColor) > 100))
+					Log.d("debug", "char alpha: " + Color.alpha(charColor));
+					Log.d("debug", "target alpha: " + Color.alpha(targetColor));
+
+					if ((Color.alpha(charColor) > 100) || (Color.alpha(targetColor) > 100)){
 						return true;  //there are non-transparent pixels which overlap
+					}
+
 				}
-				catch (IllegalArgumentException e) {
-					// nothing
-					Log.d("debug", "illegal argument to getPixel");
-				}
+
+
 			}
 		}
 		return false;
