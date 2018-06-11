@@ -234,7 +234,12 @@ class CharacterSprite {
 	}
 
 	public boolean verifyContact(RectF overlap, Bitmap targetAsset){
+		// offset twice to avoid floating point error (which cause illegal argument)
 		overlap.offset(-overlap.centerX(), -overlap.centerY());
+		overlap.offset(-overlap.centerX(), -overlap.centerY());
+
+        overlap.offset(overlap.width()/2, overlap.height()/2);
+
 
 		for (int y = 0; y < overlap.height(); y++){
 			for (int x = 0; x < overlap.width(); x++){
@@ -247,6 +252,7 @@ class CharacterSprite {
 				}
 				catch (IllegalArgumentException e) {
 					// nothing
+					Log.d("debug", "illegal argument to getPixel");
 				}
 			}
 		}
