@@ -9,6 +9,8 @@ import android.graphics.RectF;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import java.lang.reflect.Array;
+
 import static java.lang.Math.abs;
 
 /*
@@ -27,7 +29,6 @@ class CharacterSprite {
 	private float x, y;
 	private float velX, velY;
 	private float gravityX, gravityY;
-	private float prevXGravity, prevYGravity;
 	private float characterScale;
 	private final float fallVel;
 	private final float maxSpeed;
@@ -126,40 +127,10 @@ class CharacterSprite {
 		// Rotating bitmap to match proper input from the user
 		float newAngle;
 
-		float checkXNoise = abs(prevXGravity - gravityX);
-		float checkYNoise = abs(prevYGravity - gravityY);
-
-		//if(checkXNoise > 0.1 && checkYNoise > 0.1)
 		newAngle = (float)Math.toDegrees(Math.atan2(gravityX, gravityY)) * -1;
-		//else newAngle = currentRotation;
 
 		currentRotation = newAngle;
 		rotateBitmap(currentRotation, deltaTime);
-
-		prevXGravity = gravityX;
-		prevYGravity = gravityY;
-		/*
-		if(gravityX <= 0.03 && gravityX >= -0.03) newAngle = currentRotation;
-		else newAngle = (float)Math.toDegrees(Math.atan2(gravityX, gravityY)) * -1;
-
-		float lastRotation = currentRotation;
-
-		int degreeChange = easyCalculateDegreeChange(currentRotation, newAngle);
-
-		if(gravityX <= 0.08 && gravityX >= -0.08 && gravityY <= 0.08 && gravityY >= -0.08) currentRotation = lastRotation;
-		else{
-			if(abs(degreeChange) < 15) currentRotation = lastRotation;
-			else if(degreeChange >= 15) currentRotation += 5;
-			else if(degreeChange <= -15) currentRotation -= 5;
-		}
-		*/
-
-		//if(currentRotation > 180) currentRotation = currentRotation - 360;
-		//else if(currentRotation < -180) currentRotation = currentRotation + 360;
-
-		//currentRotation = newAngle;
-		//rotateBitmap(currentRotation, deltaTime);
-
 
 		// move sprite
 		y += velY * deltaTime;
@@ -172,13 +143,7 @@ class CharacterSprite {
 	}
 
 	public void updateGravity(float x, float y){
-		// smooth out decrease of speed
-		// also an interpretation of users goal
-		/*if(abs(x) < 0.2 && abs(y) < 0.2){
-			x = 0;
-			y = 0;
-		}*/
-		// feed accelerometer data to sprite
+		// save data in sprite
 		gravityX = x;
 		gravityY = y;
 	}
@@ -217,23 +182,27 @@ class CharacterSprite {
 
 		RectF self = new RectF(0,0, image.getWidth(), image.getHeight());
 
-		Matrix transform = new Matrix();
-		transform.setScale(0.9f,0.9f);
-		transform.setRotate(currentRotation);
-		transform.setTranslate(x, y);
-
-		transform.mapRect(self);
+		Matrix selfTransform = new Matrix();
+		selfTransform.setScale(0.9f,0.9f);
+		selfTransform.setRotate(currentRotation);
+		selfTransform.setTranslate(x, y);
+		selfTransform.mapRect(self);
 
 		RectF overlap = new RectF();
 		if(overlap.setIntersect(targetHitbox, self)){
 			if(targetAsset != null && targetMatrix != null){
-				return verifyContact(overlap, targetAsset, targetMatrix, transform);
+				float[] offsetOverlap = new float[4];
+				offsetOverlap[0] = self.centerX();
+				offsetOverlap[1] = self.centerY();
+				offsetOverlap[2] = targetHitbox.centerX();
+				offsetOverlap[3] = targetHitbox.centerX();
+				return verifyContact(overlap, targetAsset, targetMatrix, selfTransform, offsetOverlap);
 			} else return true;
 		}
 		return false;
 	}
 
-	public boolean verifyContact(RectF overlap, Bitmap targetAsset, Matrix targetTransform, Matrix selfTransform){
+	public boolean verifyContact(RectF overlap, Bitmap targetAsset, Matrix targetTransform, Matrix selfTransform, float[] overlapOffset){
 		// offset twice to avoid floating point error (which cause illegal argument)
 		overlap.offset(-overlap.centerX(), -overlap.centerY());
 		overlap.offset(-overlap.centerX(), -overlap.centerY());
@@ -242,20 +211,22 @@ class CharacterSprite {
 
         RectF selfOverlap = new RectF(overlap);
         selfTransform.mapRect(selfOverlap);
+        selfOverlap.offset(overlapOffset[0], overlapOffset[1]);
 
         RectF targetOverlap = new RectF(overlap);
         targetTransform.mapRect(targetOverlap);
+		targetOverlap.offset(overlapOffset[2], overlapOffset[3]);
 
 
 		for (int y = 0; y < overlap.height(); y++){
 			for (int x = 0; x < overlap.width(); x++){
 
 				// if we are within both images pixel range, check pixel values
-				if	(	selfOverlap.left + x < image.getWidth() && selfOverlap.top + y < image.getHeight() &&
-						(targetOverlap.left + x) < targetAsset.getWidth() && (targetOverlap.top + y) < targetAsset.getHeight())
+				if	(	selfOverlap.left + x < image.getWidth() && selfOverlap.top + y < image.getHeight())// &&
+						//(overlap.left + x) < targetAsset.getWidth() && (overlap.top + y) < targetAsset.getHeight())
 				{
-					int charColor 	= image.getPixel((int)selfOverlap.left + x, (int)selfOverlap.top + y);
-					int targetColor = targetAsset.getPixel((int)targetOverlap.left + x, (int)targetOverlap.top + y);
+					int charColor 	= image.getPixel((int)overlap.left + x, (int)overlap.top + y);
+					int targetColor = targetAsset.getPixel((int)overlap.left + x, (int)overlap.top + y);
 
 					Log.d("debug", "char alpha: " + Color.alpha(charColor));
 					Log.d("debug", "target alpha: " + Color.alpha(targetColor));
